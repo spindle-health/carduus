@@ -15,7 +15,7 @@ TOKEN_SPECS: dict[str, t.OpprlToken] = {
 }
 
 
-# The PII fields that each OPPRL token depends on. 
+# The PII fields that each OPPRL token depends on.
 TOKEN_PII_DEPENDENCIES: dict[str, list[t.OpprlPii]] = {
     "opprl_token_1": [
         t.OpprlPii.first_name,
