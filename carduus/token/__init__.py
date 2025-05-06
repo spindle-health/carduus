@@ -1,6 +1,5 @@
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence, Mapping
 from dataclasses import dataclass
-from typing import Iterable
 from enum import Enum
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
@@ -9,12 +8,12 @@ from pyspark.sql.functions import (
     sha2,
     udf,
     to_binary,
-    base64,
-    array_join,
-    array,
-    replace,
 )
 from pyspark.sql.types import BinaryType
+from cryptography.hazmat.primitives.serialization import (
+    load_pem_private_key,
+    load_pem_public_key,
+)
 from carduus.token.pii import (
     normalize_pii,
     enhance_pii,
@@ -130,7 +129,7 @@ class OpprlToken(Enum):
 
 def tokenize(
     df: DataFrame,
-    pii_transforms: dict[str, PiiTransform | OpprlPii],
+    pii_transforms: Mapping[str, PiiTransform | OpprlPii],
     tokens: Sequence[TokenSpec | OpprlToken],
     private_key: bytes,
 ) -> DataFrame:
@@ -160,6 +159,8 @@ def tokenize(
         The `DataFrame` with PII columns replaced by encrypted tokens.
 
     """
+    # Raise clear error message if key is invalid.
+    load_pem_private_key(private_key, None)
     pii_transforms_ = {
         c: tr.value if isinstance(tr, OpprlPii) else tr for c, tr in pii_transforms.items()
     }
@@ -214,6 +215,9 @@ def transcrypt_out(
     Returns:
         The `DataFrame` with the original encrypted tokens re-encrypted for sending to the recipient.
     """
+    # Raise clear error message if key is invalid.
+    load_pem_private_key(private_key, None)
+    load_pem_public_key(recipient_public_key)
     decrypt = udf(
         crypto.make_deterministic_decrypter(derive_aes_key(private_key)),
         returnType=BinaryType(),
@@ -250,6 +254,8 @@ def transcrypt_in(
         The `DataFrame` with the original encrypted tokens re-encrypted for sending to the destination.
 
     """
+    # Raise clear error message if key is invalid.
+    load_pem_private_key(private_key, None)
     decrypt = udf(crypto.make_asymmetric_decrypter(private_key), returnType=BinaryType())
     encrypt = udf(
         crypto.make_deterministic_encrypter(derive_aes_key(private_key)),
