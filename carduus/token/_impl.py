@@ -1,18 +1,18 @@
 from typing import Any, Callable
-import jellyfish as j
 
+import jellyfish as j
 from pyspark.sql import Column
 from pyspark.sql.functions import (
-    lit,
-    when,
+    base64,
     length,
-    substring,
-    upper,
+    lit,
     regexp_replace,
+    replace,
+    substring,
     trim,
     udf,
-    base64,
-    replace,
+    upper,
+    when,
 )
 from pyspark.sql.types import StringType
 
@@ -33,6 +33,10 @@ def null_if(pred: Callable[[Column], Column], col: Column) -> Column:
     return when(~pred(col), col).otherwise(lit(None))
 
 
+def empty_to_null(col: Column) -> Column:
+    return null_if(lambda c: length(c) == 0, col)
+
+
 def first_char(col: Column) -> Column:
     return substring(col, 1, 1)
 
@@ -45,7 +49,7 @@ metaphone = udf(_metaphone_udf_impl, returnType=StringType(), useArrow=False)
 
 
 def normalize_text(raw: Column) -> Column:
-    return null_if(lambda c: length(c) == 0, trim(regexp_replace(upper(raw), "\\s+", " ")))
+    return empty_to_null(trim(regexp_replace(upper(raw), "\\s+", " ")))
 
 
 def null_safe(func):
