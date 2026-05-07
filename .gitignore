@@ -19,4 +19,7 @@ site/
 .vscode
 *.code-workspace
 
+# Local tooling
+.serena/
+
 /private-docs
