@@ -39,6 +39,8 @@ def test_base_package_imports_without_pyspark() -> None:
             "Token",
             "TokenProtocol",
             "tokenize",
+            "transcrypt_out",
+            "transcrypt_in",
             "transcode_out",
             "transcode_in",
             "generate_pem_keys",

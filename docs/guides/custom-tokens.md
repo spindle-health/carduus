@@ -29,7 +29,7 @@ The `protocol` argument can be any implementation of [TokenProtocolFactory][spin
 
 The instances of [PiiAttribute][spindle_token.core.PiiAttribute] in the `attributes` argument determine the PII fields to jointly tokenize into a single token. This guide uses `PiiAttribute` objects for OPPRLv2 that are built-in to the spindle-health library. See [Custom PII Attributes](#custom-pii) for a guide on defining your own PII.
 
-We can pass `my_token` to the core spindle-token functions -- such as `tokenize`, `transcode_out`, and `transcode_in` -- alongside the OPPRL tokens or other custom token specifications.
+We can pass `my_token` to the core spindle-token functions -- such as `tokenize`, `transcrypt_out`, and `transcrypt_in` -- alongside the OPPRL tokens or other custom token specifications.
 
 # <a name="custom-pii"></a> Custom PII Attributes
 

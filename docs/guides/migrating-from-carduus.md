@@ -65,11 +65,11 @@ tokens = tokenize(
 
 **Token Column Names -** The spindle-token library produced token columns that have versioned names to distinguish which version of the OPPRL specification was used.
 
-## Transcoding
+## Transcryption
 
-The API for transcoding between tokens and ephemeral tokens is nearly identical in spindle-token and carduus.
+The API for transcrypting between tokens and ephemeral tokens is nearly identical in spindle-token and carduus.
 
-Carduus used the made-up verb "transcypt" instead of the more straightforward "transcode". The semantics are identical with respect to both projects and this guide will use "transcode".
+Carduus used `transcrypt_out` and `transcrypt_in` for this workflow. Spindle-token now uses the same public naming, with `transcode_out` and `transcode_in` retained as deprecated compatibility aliases.
 
 ```python
 # carduus
@@ -89,16 +89,16 @@ tokens = transcrypt_in(
 
 ```python
 # spindle-health
-from spindle_token import transcode_out, transcode_in
+from spindle_token import transcrypt_out, transcrypt_in
 from spindle_token.opprl import OpprlV0 as v0
 
-ephemeral_tokens = transcode_out(
+ephemeral_tokens = transcrypt_out(
     tokens, 
     tokens=(v0.token1, v0.token2, v0.token3), 
     recipient_public_key=b"""-----BEGIN PUBLIC KEY----- ...""",
 )
 
-tokens = transcode_in(
+tokens = transcrypt_in(
     ephemeral_tokens, 
     tokens=(v0.token1, v0.token2, v0.token3), 
 )
@@ -106,4 +106,4 @@ tokens = transcode_in(
 
 ### Key Difference
 
-**Specifying Tokens -** Carduus only supported one method of transcoding tokens and therefore the API only required the names of columns containing tokens to transcode. Spindle-token allows each token to use its own protocol (ie. different versions of OPPRL) and thus the transcode functions need instances of `Token`. The column names are expected to match the `name` attribute of the `Token` instance.
+**Specifying Tokens -** Carduus only supported one method of transcrypting tokens and therefore the API only required the names of columns containing tokens to transcrypt. Spindle-token allows each token to use its own protocol (ie. different versions of OPPRL) and thus the transcrypt functions need instances of `Token`. The column names are expected to match the `name` attribute of the `Token` instance.

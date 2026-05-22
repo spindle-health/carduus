@@ -1,7 +1,7 @@
 # Command Line Interface
 
 The spindle-token command line interface (CLI) offers tokenization and token
-transcoding capabilities of data files from the local file system. Install the
+transcryption capabilities of data files from the local file system. Install the
 optional `spark` extra to run the CLI commands:
 
 ```bash
@@ -21,7 +21,7 @@ You can test your installation and environment setup by running the `--help` com
 spindle-token --help
 ```
 
-Once installed, you can run the commands for `tokenize` and `transcode` with the relevant options and arguments. All commands and sub-commands follow the same general design. Positional arguments and paths the the input data and desired location to write output data. Options configure how the input data is transformed. For example, options dictate which tokens should be generated, which file format to use, and the encryption key.
+Once installed, you can run the commands for `tokenize` and `transcrypt` with the relevant options and arguments. All commands and sub-commands follow the same general design. Positional arguments and paths the the input data and desired location to write output data. Options configure how the input data is transformed. For example, options dictate which tokens should be generated, which file format to use, and the encryption key.
 
 This example invocation of the `tokenize` command illustrates the general pattern.
 
@@ -101,9 +101,12 @@ The help text, options, and arguments of every command and sub-command of the sp
 
 ::: mkdocs-click
     :module: spindle_token._cli
-    :command: transcode
-    :prog_name: spindle-token transcode
+    :command: transcrypt
+    :prog_name: spindle-token transcrypt
     :depth: 1
+
+`spindle-token transcode` is retained as a deprecated compatibility alias for
+`spindle-token transcrypt`.
 
 # Limitations
 

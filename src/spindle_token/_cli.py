@@ -206,7 +206,7 @@ def common_options(func):
 
 @click.group()
 def cli():
-    """A command line tool for tokenizing and transcoding data files using the Open Privacy Preserving Record Linkage (OPPRL) protocol."""
+    """A command line tool for tokenizing and transcrypting data files using the Open Privacy Preserving Record Linkage (OPPRL) protocol."""
     pass
 
 
@@ -272,12 +272,21 @@ def tokenize(
 
 
 @cli.group()
-def transcode():
+def transcrypt():
     """Prepare tokenized datasets to be sent or received."""
     pass
 
 
-def _run_transcode(
+@cli.group()
+def transcode():
+    """Deprecated alias for transcrypt."""
+    click.echo(
+        "Warning: spindle-token transcode is deprecated; use spindle-token transcrypt instead.",
+        err=True,
+    )
+
+
+def _run_transcrypt(
     input: str,
     output: str,
     key: BytesIO | None,
@@ -287,8 +296,8 @@ def _run_transcode(
     direction: str,
     recipient: BytesIO | None = None,
 ):
-    from spindle_token import transcode_in as transcode_in_df
-    from spindle_token import transcode_out as transcode_out_df
+    from spindle_token import transcrypt_in as transcrypt_in_df
+    from spindle_token import transcrypt_out as transcrypt_out_df
 
     input_path = Path(input)
     output_path = Path(output)
@@ -299,14 +308,14 @@ def _run_transcode(
     df = spark.read.format(format).option("delimiter", "|").option("header", True).load(input)
 
     if direction == "out":
-        df = transcode_out_df(
+        df = transcrypt_out_df(
             df,
             tokens,
             recipient_public_key=recipient.read() if recipient else None,
             private_key=key.read() if key else None,
         )
     else:
-        df = transcode_in_df(
+        df = transcrypt_in_df(
             df,
             tokens,
             private_key=key.read() if key else None,
@@ -322,14 +331,14 @@ def _run_transcode(
         dfw.save(str(output_path))
 
 
-@transcode.command("out")
+@transcrypt.command("out")
 @click.option(
     "-t",
     "--token",
     type=TOKEN_CHOICE,
     multiple=True,
     required=True,
-    help="The column name of an OPPRL token on the input data to transcode.",
+    help="The column name of an OPPRL token on the input data to transcrypt.",
 )
 @click.option(
     "-r",
@@ -351,7 +360,7 @@ def out(
     parallelism: int | None,
 ):
     """Prepare ephemeral tokens for a specific recipient."""
-    _run_transcode(
+    _run_transcrypt(
         input,
         output,
         key,
@@ -363,14 +372,14 @@ def out(
     )
 
 
-@transcode.command("in")
+@transcrypt.command("in")
 @click.option(
     "-t",
     "--token",
     type=TOKEN_CHOICE,
     multiple=True,
     required=True,
-    help="The column name of an OPPRL token on the input data to transcode.",
+    help="The column name of an OPPRL token on the input data to transcrypt.",
 )
 @common_options
 @click.argument("input", type=click.Path(exists=True))
@@ -384,7 +393,7 @@ def in_(
     parallelism: int | None,
 ):
     """Convert a dataset of ephemeral tokens into tokens."""
-    _run_transcode(
+    _run_transcrypt(
         input,
         output,
         key,
@@ -393,3 +402,7 @@ def in_(
         parallelism,
         direction="in",
     )
+
+
+transcode.add_command(out, "out")
+transcode.add_command(in_, "in")

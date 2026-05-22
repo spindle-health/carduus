@@ -43,6 +43,7 @@ def test_cli_help_imports_without_pyspark() -> None:
         result = CliRunner().invoke(cli, ["--help"])
         assert result.exit_code == 0, result.output
         assert "tokenize" in result.output
+        assert "transcrypt" in result.output
         assert "transcode" in result.output
         """)
 

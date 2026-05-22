@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives.serialization import (
     NoEncryption,
     PrivateFormat,
 )
-from spindle_token import tokenize, transcode_out, transcode_in
+from spindle_token import tokenize, transcrypt_out, transcrypt_in, transcode_out, transcode_in
 from spindle_token._crypto import _PRIVATE_KEY_ENV_VAR, _RECIPIENT_PUBLIC_KEY_ENV_VAR
 from spindle_token._utils import base64_no_newline
 from spindle_token.core import PiiAttribute, Token
@@ -85,7 +85,7 @@ def _custom_pii_dataframe(spark: SparkSession):
     )
 
 
-def test_tokenize_and_transcode_opprl(
+def test_tokenize_and_transcrypt_opprl(
     spark: SparkSession, private_key: bytes, acme_public_key: bytes, acme_private_key: bytes
 ):
     all_tokens = [
@@ -225,7 +225,7 @@ def test_tokenize_and_transcode_opprl(
             )
         ),
     )
-    ephemeral_tokens = transcode_out(
+    ephemeral_tokens = transcrypt_out(
         tokens.select(*all_token_names),
         tokens=all_tokens,
         recipient_public_key=acme_public_key,
@@ -239,7 +239,7 @@ def test_tokenize_and_transcode_opprl(
     # When transferring between parties, tokens from the same PII should _not_ be equal.
     assert ephemeral_tokens.distinct().count() == 2
 
-    tokens2 = transcode_in(
+    tokens2 = transcrypt_in(
         ephemeral_tokens.select(*all_token_names),
         tokens=all_tokens,
         private_key=acme_private_key,
@@ -288,7 +288,7 @@ def test_tokenize_and_transcode_opprl(
     )
 
 
-def test_tokenize_and_transcode_opprl_v2(
+def test_tokenize_and_transcrypt_opprl_v2(
     spark: SparkSession, private_key: bytes, acme_public_key: bytes, acme_private_key: bytes
 ):
     all_tokens = [
@@ -408,7 +408,7 @@ def test_tokenize_with_token_generator_adds_tokens(spark: SparkSession, private_
     assert "opprl_token_1v2" in actual.columns
 
 
-def test_transcode_out_with_token_generator_adds_ephemeral_tokens(
+def test_transcrypt_out_with_token_generator_adds_ephemeral_tokens(
     spark: SparkSession,
     private_key: bytes,
     acme_public_key: bytes,
@@ -434,7 +434,7 @@ def test_transcode_out_with_token_generator_adds_ephemeral_tokens(
     )
 
     token_iter = (token for token in (v2.token1,))
-    actual = transcode_out(
+    actual = transcrypt_out(
         tokens,
         token_iter,
         recipient_public_key=acme_public_key,
@@ -445,7 +445,7 @@ def test_transcode_out_with_token_generator_adds_ephemeral_tokens(
     assert values[0] != values[1]
 
 
-def test_transcode_in_with_token_generator_restores_tokens(
+def test_transcrypt_in_with_token_generator_restores_tokens(
     spark: SparkSession,
     private_key: bytes,
     acme_public_key: bytes,
@@ -470,7 +470,7 @@ def test_transcode_in_with_token_generator_restores_tokens(
         tokens=[v2.token1],
         private_key=private_key,
     )
-    ephemeral = transcode_out(
+    ephemeral = transcrypt_out(
         tokenized,
         [v2.token1],
         recipient_public_key=acme_public_key,
@@ -478,10 +478,74 @@ def test_transcode_in_with_token_generator_restores_tokens(
     )
 
     token_iter = (token for token in (v2.token1,))
-    actual = transcode_in(ephemeral, token_iter, private_key=acme_private_key)
+    actual = transcrypt_in(ephemeral, token_iter, private_key=acme_private_key)
 
     values = [row[0] for row in actual.select(v2.token1.name).collect()]
     assert values[0] == values[1]
+
+
+def test_transcode_out_deprecated_alias_warns(
+    spark: SparkSession,
+    private_key: bytes,
+    acme_public_key: bytes,
+):
+    pii = spark.createDataFrame(
+        [Row(first_name="Louis", last_name="Pasteur", gender="male", birth_date="1822-12-27")]
+    )
+    tokenized = tokenize(
+        pii,
+        col_mapping={
+            v2.first_name: "first_name",
+            v2.last_name: "last_name",
+            v2.gender: "gender",
+            v2.birth_date: "birth_date",
+        },
+        tokens=[v2.token1],
+        private_key=private_key,
+    )
+
+    with pytest.warns(DeprecationWarning, match=r"transcode_out\(\) is deprecated"):
+        actual = transcode_out(
+            tokenized,
+            [v2.token1],
+            recipient_public_key=acme_public_key,
+            private_key=private_key,
+        )
+
+    assert v2.token1.name in actual.columns
+
+
+def test_transcode_in_deprecated_alias_warns(
+    spark: SparkSession,
+    private_key: bytes,
+    acme_public_key: bytes,
+    acme_private_key: bytes,
+):
+    pii = spark.createDataFrame(
+        [Row(first_name="Louis", last_name="Pasteur", gender="male", birth_date="1822-12-27")]
+    )
+    tokenized = tokenize(
+        pii,
+        col_mapping={
+            v2.first_name: "first_name",
+            v2.last_name: "last_name",
+            v2.gender: "gender",
+            v2.birth_date: "birth_date",
+        },
+        tokens=[v2.token1],
+        private_key=private_key,
+    )
+    ephemeral = transcrypt_out(
+        tokenized,
+        [v2.token1],
+        recipient_public_key=acme_public_key,
+        private_key=private_key,
+    )
+
+    with pytest.warns(DeprecationWarning, match=r"transcode_in\(\) is deprecated"):
+        actual = transcode_in(ephemeral, [v2.token1], private_key=acme_private_key)
+
+    assert v2.token1.name in actual.columns
 
 
 @pytest.mark.parametrize(
@@ -738,7 +802,7 @@ def test_null_safe_tokenize(spark: SparkSession, private_key: bytes, version):
 
 
 @pytest.mark.parametrize("version", [v0, v1, v2], ids=["v0", "v1", "v2"])
-def test_null_safe_transcode(
+def test_null_safe_transcrypt(
     spark: SparkSession,
     private_key: bytes,
     acme_public_key: bytes,
@@ -749,9 +813,9 @@ def test_null_safe_transcode(
         [Row(**{version.token1.name: None})],
         StructType([StructField(version.token1.name, StringType())]),
     )
-    ephemeral = transcode_out(tokens, (version.token1,), acme_public_key, private_key)
+    ephemeral = transcrypt_out(tokens, (version.token1,), acme_public_key, private_key)
     assertDataFrameEqual(tokens, ephemeral)
-    tokens2 = transcode_in(ephemeral, (version.token1,), acme_private_key)
+    tokens2 = transcrypt_in(ephemeral, (version.token1,), acme_private_key)
     assertDataFrameEqual(ephemeral, tokens2)
 
 
@@ -779,11 +843,11 @@ def test_keys_from_env(
         ),
     )
 
-    ephemeral_tokens = transcode_out(tokens, (version.token1,))
+    ephemeral_tokens = transcrypt_out(tokens, (version.token1,))
 
     # Simulate the environment of the recipient.
     monkeypatch.setenv(_PRIVATE_KEY_ENV_VAR, acme_private_key.decode())
-    acme_tokens = transcode_in(ephemeral_tokens, (version.token1,))
+    acme_tokens = transcrypt_in(ephemeral_tokens, (version.token1,))
     assertDataFrameEqual(
         acme_tokens,
         tokenize(
@@ -1081,13 +1145,13 @@ def test_v2_protocol_rejects_non_rsa_private_keys_at_bind_time(
         v2.protocol.bind(non_rsa_private_key, None)
 
 
-def test_transcode_out_v2_rejects_non_rsa_private_keys_at_bind_time(
+def test_transcrypt_out_v2_rejects_non_rsa_private_keys_at_bind_time(
     spark: SparkSession, acme_public_key: bytes, non_rsa_private_key: bytes
 ):
     tokens = spark.createDataFrame([Row(opprl_token_1v2="placeholder")])
 
     with pytest.raises(TypeError, match="RSA"):
-        transcode_out(
+        transcrypt_out(
             tokens,
             (v2.token1,),
             recipient_public_key=acme_public_key,
@@ -1095,13 +1159,13 @@ def test_transcode_out_v2_rejects_non_rsa_private_keys_at_bind_time(
         )
 
 
-def test_transcode_in_v2_rejects_non_rsa_private_keys_at_bind_time(
+def test_transcrypt_in_v2_rejects_non_rsa_private_keys_at_bind_time(
     spark: SparkSession, non_rsa_private_key: bytes
 ):
     ephemeral_tokens = spark.createDataFrame([Row(opprl_token_1v2="placeholder")])
 
     with pytest.raises(TypeError, match="RSA"):
-        transcode_in(
+        transcrypt_in(
             ephemeral_tokens,
             (v2.token1,),
             private_key=non_rsa_private_key,

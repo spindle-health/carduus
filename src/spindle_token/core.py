@@ -121,6 +121,18 @@ class TokenProtocol(ABC):
         """
         ...
 
+    def transcrypt_out(self, token: Column) -> Column:
+        """Transcrypts the given token into an ephemeral token.
+
+        Arguments:
+            token:
+                A pyspark `Column` of tokens.
+
+        Returns:
+            A pyspark `Column` expression of ephemeral tokens created from the input tokens.
+        """
+        return self.transcode_out(token)
+
     @abstractmethod
     def transcode_in(self, ephemeral_token: Column) -> Column:
         """Transcodes the given ephemeral token into a normal token.
@@ -133,6 +145,18 @@ class TokenProtocol(ABC):
             A pyspark `Column` expression of tokens created from the input ephemeral tokens.
         """
         ...
+
+    def transcrypt_in(self, ephemeral_token: Column) -> Column:
+        """Transcrypts the given ephemeral token into a normal token.
+
+        Arguments:
+            ephemeral_token:
+                A pyspark `Column` of ephemeral tokens.
+
+        Returns:
+            A pyspark `Column` expression of tokens created from the input ephemeral tokens.
+        """
+        return self.transcode_in(ephemeral_token)
 
 
 P = TypeVar("P", bound=TokenProtocol)
@@ -160,10 +184,10 @@ class TokenProtocolFactory(ABC, Generic[P]):
 
         Arguments:
             private_key:
-                The private RSA key to use when tokenizing PII and transcoding tokens.
+                The private RSA key to use when tokenizing PII and transcrypting tokens.
             recipient_public_key:
-                The public RSA key of the intended data recipient to use when transcoding tokens into ephemeral tokens.
-                Can be `None` if the instance of `TokenProtocol` will not be transcoding tokens into ephemeral tokens.
+                The public RSA key of the intended data recipient to use when transcrypting tokens into ephemeral tokens.
+                Can be `None` if the instance of `TokenProtocol` will not be transcrypting tokens into ephemeral tokens.
 
         Returns:
             An instance of a `TokenProtocol` implementation.
