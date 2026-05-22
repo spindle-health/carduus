@@ -44,13 +44,19 @@ class _ProtocolV1(TokenProtocol):
     def tokenize(self, attribute_ids: list[str]) -> Column:
         return v0._tokenize_impl(attribute_ids, self.encrypt_aes)
 
-    def transcode_out(self, token: Column) -> Column:
+    def transcrypt_out(self, token: Column) -> Column:
         if not self.encrypt_rsa:
             raise ValueError("No recipient public key provided")
         return v0._transcrypt_out_impl(token, self.decrypt_aes, self.encrypt_rsa)
 
-    def transcode_in(self, ephemeral_token: Column) -> Column:
+    def transcrypt_in(self, ephemeral_token: Column) -> Column:
         return v0._transcrypt_in_impl(ephemeral_token, self.decrypt_rsa, self.encrypt_aes)
+
+    def transcode_out(self, token: Column) -> Column:
+        return self.transcrypt_out(token)
+
+    def transcode_in(self, ephemeral_token: Column) -> Column:
+        return self.transcrypt_in(ephemeral_token)
 
 
 class _ProtocolFactoryV1(TokenProtocolFactory[_ProtocolV1]):

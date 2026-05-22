@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide provides installation instructions and a quick tour of the main features of spindle-token. 
+This guide provides installation instructions and a quick tour of the main features of spindle-token.
 
 ## Installation
 
@@ -17,7 +17,7 @@ pip install "spindle-token[spark]"
 
 If you only need the pure-Python helpers such as version inspection or PEM key
 generation, you can install the base package with `pip install spindle-token`.
-Spark-backed tokenization and transcode APIs require the `spark` extra.
+Spark-backed tokenization and transcrypt APIs require the `spark` extra.
 
 If your dependency scanner reports warnings about `oci` or `pyOpenSSL`, those are not
 direct runtime dependencies of spindle-token. In normal Spark usage, they usually come
@@ -37,7 +37,7 @@ Tokenization is a specific use case of cryptography and relies on encryption key
 
 There are 3 kinds of encryption keys that play different roles:
 
-  1. Your private RSA key - Used to transcode incoming data and derive a symmetric encryption key used to tokenize PII. **This key must never be shared or accessed by untrusted parties.**
+  1. Your private RSA key - Used to transcrypt incoming data and derive a symmetric encryption key used to tokenize PII. **This key must never be shared or accessed by untrusted parties.**
   2. Your public RSA key - The public key counterpart to your private key. This key will be shared with trusted parties that will be sending you tokenized data.
   3. Trusted partner public keys - A collection of public keys from the various trusted parties that you will be sending tokenized to.
 
@@ -49,9 +49,9 @@ To help encourage users to not hard-code encryption keys in their source code, s
 
 In some cases, it may be appropriate to explicitly pass the private keys as arguments to the relevant spindle-token functions. For example, if your organization's secret manager encourages programmatic access at runtime or if you are overriding the encryption key during testing. Spindle-token functions support the explicit passing of encryption keys as `bytes` but it is highly recommended that users do not hardcode encryption keys into source code or put PEM files with production encryption keys into version control.
 
-This guide assumes that your private key is set via the `SPINDLE_TOKEN_PRIVATE_KEY` environment variable. For information about passing the private key as an explicit argument, see the spindle-token [API](../api.md) documentation. 
+This guide assumes that your private key is set via the `SPINDLE_TOKEN_PRIVATE_KEY` environment variable. For information about passing the private key as an explicit argument, see the spindle-token [API](../api.md) documentation.
 
-Public keys don't need to be managed as secrets. It is possible to specify the public key (in PEM format) for your intended data recipient with the `SPINDLE_TOKEN_RECIPIENT_PUBLIC_KEY` environment variable or pass the public key to spindle-token functions as an explicit argument. Users can pick whichever method is more convenient. 
+Public keys don't need to be managed as secrets. It is possible to specify the public key (in PEM format) for your intended data recipient with the `SPINDLE_TOKEN_RECIPIENT_PUBLIC_KEY` environment variable or pass the public key to spindle-token functions as an explicit argument. Users can pick whichever method is more convenient.
 
 ### Generating New Keys
 
@@ -59,12 +59,12 @@ Spindle-token expects encryption keys to be represented with the [PEM](https://e
 
 You can generate these keys using tools like [`openssl`](https://www.openssl.org/) or by calling the `generate_pem_keys` function provided by spindle-token. This function will return a `tuple` containing 2 instances of `bytes`. The first is the PEM data for your private key that you must keep secret. The second is the PEM data for your public key that can may share with the parties you intend to receive data from.
 
-You can decode these keys into strings of text (using UTF-8) or write them into a `.pem` file for later use. 
+You can decode these keys into strings of text (using UTF-8) or write them into a `.pem` file for later use.
 
 ``` python
 from spindle_token import generate_pem_keys
 
-private, public = generate_pem_keys()  # Or provide key_size= 
+private, public = generate_pem_keys()  # Or provide key_size=
 
 print(private.decode())
 # -----BEGIN PRIVATE KEY-----
@@ -147,31 +147,35 @@ The `tokens` argument is collection of OPPRL token specifications. Each token sp
 | `token2` | `first_soundex`, `last_soundex`, `gender`, `birth_date` |
 | `token3` | `first_metaphone`, `last_metaphone`, `gender`, `birth_date` |
 
-> :bulb: **Why multiple tokens?** 
+> :bulb: **Why multiple tokens?**
 >
 > Each use case has a different tolerance for false positive and false negative matches. By producing multiple tokens for each record using PII attributes, each user can customize their match logic to trade-off between different kinds of match errors. Linking records that match on _any_ token will result in fewer false negatives, and linking records that match _all_ tokens will result in fewer false positives. User can design their own match strategies by using subsets of tokens.
 
 If you need the same-key stability fix described in the security findings, use `OpprlV2` instead of `OpprlV1`. The examples in this guide now use V2, and V1 remains available for historical compatibility checks.
 
-## Transcoding and Ephemeral Tokens
+## Transcryption and Ephemeral Tokens
 
-Tokens generated by a given private key can be transcoded into tokens that match those of another private key through a "transcoding" protocol. This process is most commonly done in the context of data sharing.
+New code should use `transcrypt_out` and `transcrypt_in`. The previous
+`transcode_out` and `transcode_in` names remain available as deprecated
+compatibility aliases.
 
-Transcoding is performed when a user wants to share tokenized data with another party. The sender and recipient each have a corresponding transcode function that must be invoked to ensure safe transfer of data between trusted parties. The sender transcodes their tokens into "ephemeral tokens" that are specific to the transaction. In other words, the ephemeral tokens do not match the sender's data, the recipients data, or any prior ephemeral token from any _any_ transactions between _any_ sender and recipient. 
+Tokens generated by a given private key can be transcrypted into tokens that match those of another private key through a "transcryption" protocol. This process is most commonly done in the context of data sharing.
 
-Furthermore, records from the same dataset that have identical PII will be assigned unique ephemeral tokens. This destroys the utility of the tokens until the recipient performs the reverse transcoding process using their private key. This is beneficial in the event that a third party gains access to the dataset during transfer (eg. if transcoded datasets are delivered over an insecure connection) because records pertaining to the same subject cannot be associated with each other.
+Transcryption is performed when a user wants to share tokenized data with another party. The sender and recipient each have a corresponding transcrypt function that must be invoked to ensure safe transfer of data between trusted parties. The sender transcrypts their tokens into "ephemeral tokens" that are specific to the transaction. In other words, the ephemeral tokens do not match the sender's data, the recipients data, or any prior ephemeral token from any _any_ transactions between _any_ sender and recipient.
+
+Furthermore, records from the same dataset that have identical PII will be assigned unique ephemeral tokens. This destroys the utility of the tokens until the recipient performs the reverse transcryption process using their private key. This is beneficial in the event that a third party gains access to the dataset during transfer (eg. if transcrypted datasets are delivered over an insecure connection) because records pertaining to the same subject cannot be associated with each other.
 
 ### Sender
 
-Spindle-token provides the `transcode_out` function in for the sender to call on their tokenized datasets. In the following code snippet, notice the 2 records pertaining to the same subject (`label = 1`) no longer have identical tokens. The `tokens_to_send` DataFrame can safely be written files or a database and delivered to the recipient.
+Spindle-token provides the `transcrypt_out` function in for the sender to call on their tokenized datasets. In the following code snippet, notice the 2 records pertaining to the same subject (`label = 1`) no longer have identical tokens. The `tokens_to_send` DataFrame can safely be written files or a database and delivered to the recipient.
 
 ```python
-from spindle_token import transcode_out
+from spindle_token import transcrypt_out
 from spindle_token.opprl import OpprlV2
 
-tokens_to_send = transcode_out(
-    tokens, 
-    tokens=(OpprlV2.token1, OpprlV2.token2, OpprlV2.token3), 
+tokens_to_send = transcrypt_out(
+    tokens,
+    tokens=(OpprlV2.token1, OpprlV2.token2, OpprlV2.token3),
     recipient_public_key=b"""-----BEGIN PUBLIC KEY----- ...""",
 )
 tokens.to_send.show()
@@ -186,23 +190,23 @@ tokens.to_send.show()
 # +-----+--------------------+--------------------+--------------------+
 ```
 
-The `tokens` argument is a iterable collection containing the token specifications of the tokens to transcode. It is expected that the input DataFrame has columns with the same name as the `name` attribute of the token specification. For example, `OpprlV2.token3.name` is `opprl_token_3v2` and therefore the DataFrame must contain a column with that name. See the OPPRL protocol for more information on understanding the token name format.
+The `tokens` argument is a iterable collection containing the token specifications of the tokens to transcrypt. It is expected that the input DataFrame has columns with the same name as the `name` attribute of the token specification. For example, `OpprlV2.token3.name` is `opprl_token_3v2` and therefore the DataFrame must contain a column with that name. See the OPPRL protocol for more information on understanding the token name format.
 
-The `recipient_public_key` argument is the public key provided by the intended recipient. 
+The `recipient_public_key` argument is the public key provided by the intended recipient.
 
 ### Recipient
 
-The `transcode_in` function provides the transcoding process for the recipient. It is called on a dataset produced by the sender using `transcode_out` to convert ephemeral tokens into normal tokens that will match other tokenized datasets maintained by the recipient, including prior datasets delivered from the same sender.
+The `transcrypt_in` function provides the transcryption process for the recipient. It is called on a dataset produced by the sender using `transcrypt_out` to convert ephemeral tokens into normal tokens that will match other tokenized datasets maintained by the recipient, including prior datasets delivered from the same sender.
 
 Notice that the first 2 records pertaining to the same subject (label = 1) have identical tokens again, but do these tokens are not the same as the original tokens because they are encrypted with the scheme for the recipient.
 
 ```python
-from spindle_token import transcode_in
+from spindle_token import transcrypt_in
 from spindle_token.opprl import OpprlV2
 
 tokens_received = transcrypt_in(
-    tokens_to_send, 
-    tokens=(OpprlV2.token1, OpprlV2.token2, OpprlV2.token3), 
+    tokens_to_send,
+    tokens=(OpprlV2.token1, OpprlV2.token2, OpprlV2.token3),
 )
 tokens_received.show()
 # +-----+--------------------+--------------------+--------------------+
@@ -216,11 +220,11 @@ tokens_received.show()
 # +-----+--------------------+--------------------+--------------------+
 ```
 
-As with `transcode_out`, the `tokens` argument is a iterable collection containing the token specifications of the tokens to transcode. The input DataFrame is expected to include columns with names matching the  `.name` of each token specification.
+As with `transcrypt_out`, the `tokens` argument is a iterable collection containing the token specifications of the tokens to transcrypt. The input DataFrame is expected to include columns with names matching the  `.name` of each token specification.
 
 ## Deployment
 
-Spindle-token is a Python library that uses PySpark to parallelize and distribute the tokenization and transcode workloads. Your application that uses spindle-token can be submitted to any compatible Spark cluster, or use a connection to a remote spark cluster. Otherwise, spindle-health will start a local Spark process that uses the resources of the host machine.
+Spindle-token is a Python library that uses PySpark to parallelize and distribute the tokenization and transcrypt workloads. Your application that uses spindle-token can be submitted to any compatible Spark cluster, or use a connection to a remote spark cluster. Otherwise, spindle-health will start a local Spark process that uses the resources of the host machine.
 
 For more information about different modes of deployment, see the official Spark documentation.
 

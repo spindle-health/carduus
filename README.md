@@ -10,15 +10,19 @@ Privacy Preserving Record Linkage (PPRL) is crucial component to data de-identif
 
 The task of PPRL is to replace the attributes of a every record denoting Personally Identifiable Information (PII) with a token produced by a one-way cryptographic function. This prevents observers of the tokenized data from obtaining the PII. The tokens are produced deterministically such that input records with the same, or similar, PII attributes will produce an identical token. This allows practitioners to associate records across datasets that are highly likely to belong to the same data subject without having access to PII.
 
-Tokenization is also used when data is shared between organizations to limit, or in some cases fully mitigate, the risk of subject re-identification in the event that an untrusted third party gains access to a dataset containing sensitive data. Each party produces encrypted tokens using a different secret key so that any compromised data asset is, at worst, only matchable to other datasets maintained by the same party. During data sharing transactions, a specific "transcode" data flow is used to re-encrypt the sender's tokens into ephemeral tokens that do not match tokens in any other dataset and can only be ingested using the recipients secret key. At no point in the "transcode" data flow is the original PII used.
+Tokenization is also used when data is shared between organizations to limit, or in some cases fully mitigate, the risk of subject re-identification in the event that an untrusted third party gains access to a dataset containing sensitive data. Each party produces encrypted tokens using a different secret key so that any compromised data asset is, at worst, only matchable to other datasets maintained by the same party. During data sharing transactions, a specific "transcrypt" data flow is used to re-encrypt the sender's tokens into ephemeral tokens that do not match tokens in any other dataset and can only be ingested using the recipients secret key. At no point in the "transcrypt" data flow is the original PII used.
 
 The spindle-token is the canonical implementation of the [Open Privacy Preserving Record Linkage](https://token.spindlehealth.com/opprl/PROTOCOL/) (OPPRL) protocol. This protocol presents a standardized methodology for tokenization that can be implemented in any data system to increase interoperability. The spindle-token implementation is a python library that distributes tokenization workloads using apache [Spark](https://spark.apache.org/) across multiple cores or multiple machines in a high performance computing cluster for efficient tokenization of any scale datasets.
 
-For Spark-backed tokenization and transcode workflows, install the optional Spark extra:
+For Spark-backed tokenization and transcrypt workflows, install the optional Spark extra:
 
 ```bash
 pip install "spindle-token[spark]"
 ```
+
+Use `transcrypt_out()` and `transcrypt_in()` for data-sharing workflows. The
+older `transcode_out()` and `transcode_in()` names remain available as
+deprecated compatibility aliases.
 
 The base `spindle-token` package remains importable without Spark so non-Spark
 environments and serverless dependency checks do not need to pull in PySpark.
@@ -50,7 +54,7 @@ small mechanical change:
 
 1. Replace `OpprlV1` imports with `OpprlV2`.
 2. Keep the same attribute mapping and token selection.
-3. Re-run your tokenization and transcode tests against your existing data.
+3. Re-run your tokenization and transcrypt tests against your existing data.
 
 `OpprlV2` preserves the V1 token structure and normalization rules, but it
 canonicalizes the private key before deriving the AES key. That means V2 is the

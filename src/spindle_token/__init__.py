@@ -3,7 +3,7 @@
 Most users will only need to use the 3 main functions in this top-level module along with the provided
 configuration objects corresponding to OPPRL tokenization.
 
-The 3 main functions provide tokenization and transcoding capabilities for data senders and recipients
+The main functions provide tokenization and transcryption capabilities for data senders and recipients
 respectively.
 
 """
@@ -14,6 +14,7 @@ from collections.abc import Iterable, Mapping
 from functools import lru_cache
 from importlib import import_module
 from typing import TYPE_CHECKING
+from warnings import warn
 
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.serialization import (
@@ -36,6 +37,8 @@ __all__ = [
     "Token",
     "TokenProtocol",
     "tokenize",
+    "transcrypt_out",
+    "transcrypt_in",
     "transcode_out",
     "transcode_in",
     "generate_pem_keys",
@@ -64,13 +67,35 @@ def tokenize(
     return _spark_api().tokenize(df, col_mapping, tokens, private_key)
 
 
+def transcrypt_out(
+    df: DataFrame,
+    tokens: Iterable[Token],
+    recipient_public_key: bytes | None = None,
+    private_key: bytes | None = None,
+) -> DataFrame:
+    return _spark_api().transcrypt_out(df, tokens, recipient_public_key, private_key)
+
+
+def transcrypt_in(
+    df: DataFrame,
+    tokens: Iterable[Token],
+    private_key: bytes | None = None,
+) -> DataFrame:
+    return _spark_api().transcrypt_in(df, tokens, private_key)
+
+
 def transcode_out(
     df: DataFrame,
     tokens: Iterable[Token],
     recipient_public_key: bytes | None = None,
     private_key: bytes | None = None,
 ) -> DataFrame:
-    return _spark_api().transcode_out(df, tokens, recipient_public_key, private_key)
+    warn(
+        "transcode_out() is deprecated; use transcrypt_out() instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return transcrypt_out(df, tokens, recipient_public_key, private_key)
 
 
 def transcode_in(
@@ -78,7 +103,12 @@ def transcode_in(
     tokens: Iterable[Token],
     private_key: bytes | None = None,
 ) -> DataFrame:
-    return _spark_api().transcode_in(df, tokens, private_key)
+    warn(
+        "transcode_in() is deprecated; use transcrypt_in() instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return transcrypt_in(df, tokens, private_key)
 
 
 def generate_pem_keys(key_size: int = 2048) -> tuple[bytes, bytes]:

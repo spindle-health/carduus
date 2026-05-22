@@ -46,11 +46,11 @@ re-identification in the event an untrusted third party gains access to
 a dataset containing sensitive data. Each party produces encrypted
 tokens using a different secret key so that any compromised data asset
 is, at worst, only matchable to other datasets maintained by the same
-party. During data sharing transactions, a specific “transcode” data
+party. During data sharing transactions, a specific “transcrypt” data
 flow is used to first re-encrypt the sender’s tokens into ephemeral
 tokens that do not match tokens in any other dataset and can only be
 ingested using the recipient’s secret key. At no point in the
-“transcode” data flow is the original PII used.
+“transcrypt” data flow is the original PII used.
 
 # 2. Glossary
 
@@ -73,7 +73,7 @@ a first name attribute.
 **Ephemeral Token:** A token produced with
 non-deterministic encryption (ie. RSA with OAEP and MGF1) that is used
 when data is in transit from a sender to recipient. Ephemeral tokens
-cannot be used for record linkage until they are transcoded into normal
+cannot be used for record linkage until they are transcrypted into normal
 tokens by the recipient.
 
 **Implementer:** An individual or organization that creates a software
@@ -104,10 +104,10 @@ requires secure key exchange.
 encrypting the hash of concatenated, normalized PII fields. Used
 deterministically for record linkage.
 
-**Transcode:** The process of securely transforming tokens encrypted
+**Transcrypt:** The process of securely transforming tokens encrypted
 with a sender’s key into tokens encrypted with a recipient’s key,
 enabling linkage without sharing private keys or PII. Data being
-transcoded has ephemeral tokens while in transit.
+transcrypted has ephemeral tokens while in transit.
 
 **User:** The end user of an OPPRL implementation. May refer to an
 individual or organization.
@@ -764,7 +764,7 @@ that they must appear in the joined PII string in
 
 - **Token 13**: Health Plan Group Number, Health Plan Member ID
 
-# <a name="transcode"></a> 7. Transcoding Tokens
+# <a name="transcode"></a> 7. Transcrypting Tokens
 
 A key function of Privacy Preserving Record Linkage (PPRL) is the
 ability to associate records describing the same Subject without
@@ -783,7 +783,7 @@ different token values for the same subjects.
 
 To enable cross-custodian data linking without introducing a universal
 token representation that could be used by untrusted third parties, a
-“transcode” cryptographic workflow is performed in coordination between
+“transcrypt” cryptographic workflow is performed in coordination between
 Custodian and Recipient. The workflow is broken up into 2 data flows:
 one performed by the Custodian to prepare data to be shared, and one
 performed by the recipient to create linkable tokenized records.
@@ -874,7 +874,7 @@ Users should consider periodically rotating encryption keys to reduce
 the volume of data encrypted with a single key and shorten the window
 of vulnerability for a compromised key.
 
-User’s can perform a one-time Transcoding workflow as described in
+User’s can perform a one-time Transcryption workflow as described in
 <a href="#transcode" class="ref">Section 7</a> where the user acts as both the
 sending Custodian and the Recipient.
 
@@ -885,7 +885,7 @@ When data recipients use a key rotation policy, it is recommended that
 data custodian's sending data should communicate which public
 key they are using. This communication can happen out-of-band or the sender 
 can include some form of [checksum](https://en.wikipedia.org/wiki/Checksum) 
-generated from the public key used to transcode the tokens into ephemeral
+generated from the public key used to transcrypt the tokens into ephemeral
 tokens. This is currently out of scope for the OPPRL protocol.
 
 # References
@@ -953,5 +953,4 @@ Number.” 11. Vol. 45. Social Security Administration.
 Social Security Administration. 2011. “Social Security Is Changing the
 Way SSNs Are Issued.” Social Security Administration.
 <https://www.ssa.gov/kc/SSAFactSheet--IssuingSSNs.pdf>.
-
 

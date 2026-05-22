@@ -2,6 +2,18 @@
 
 All notable changes to `spindle-token` will be documented in this file.
 
+## Unreleased
+
+### API
+
+- Added `transcrypt_out()` and `transcrypt_in()` as the preferred names for
+  preparing tokenized datasets for sharing and restoring received ephemeral
+  tokens.
+- Deprecated `transcode_out()` and `transcode_in()`; they remain available as
+  compatibility aliases and emit `DeprecationWarning`.
+- Added `spindle-token transcrypt` as the preferred CLI command while keeping
+  `spindle-token transcode` as a deprecated compatibility command.
+
 ## 2.3.0
 
 ### Packaging and Metadata

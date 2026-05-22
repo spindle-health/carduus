@@ -1,4 +1,5 @@
 from collections.abc import Iterable, Mapping
+from warnings import warn
 
 from pyspark.sql import Column, DataFrame
 from pyspark.sql.functions import col
@@ -120,20 +121,20 @@ def tokenize(
     return with_tokens.drop(*to_drop)
 
 
-def transcode_out(
+def transcrypt_out(
     df: DataFrame,
     tokens: Iterable[Token],
     recipient_public_key: bytes | None = None,
     private_key: bytes | None = None,
 ) -> DataFrame:
-    """Transcodes token columns of a dataframe into ephemeral tokens.
+    """Transcrypts token columns of a dataframe into ephemeral tokens.
 
     Arguments:
         df:
             The pyspark `DataFrame` containing token columns.
         tokens:
             A collection of [`Token`][spindle_token.core.Token] objects that denote which columns of the input dataframe
-            will be transcoded into ephemeral tokens.
+            will be transcrypted into ephemeral tokens.
         recipient_public_key:
             The public RSA key of the recipient who will be receiving the dataset with ephemeral tokens. Can also be supplied
             the SPINDLE_TOKEN_RECIPIENT_PUBLIC_KEY environment variable.
@@ -158,31 +159,31 @@ def transcode_out(
     protocols = _bound_protocols(tokens, private_key, recipient_public_key)
     return df.withColumns(
         {
-            token.name: protocols[token.protocol.factory_id].transcode_out(col(token.name))
+            token.name: protocols[token.protocol.factory_id].transcrypt_out(col(token.name))
             for token in tokens
         }
     )
 
 
-def transcode_in(
+def transcrypt_in(
     df: DataFrame,
     tokens: Iterable[Token],
     private_key: bytes | None = None,
 ) -> DataFrame:
-    """Transcodes ephemeral token columns into normal tokens.
+    """Transcrypts ephemeral token columns into normal tokens.
 
-    Used by the data recipient of a dataset containing ephemeral tokens produced by [`transcode_out`][spindle_token.transcode_out]
-    to transcode the ephemeral tokens such that they will match other datasets tokenized with the same private key.
+    Used by the data recipient of a dataset containing ephemeral tokens produced by [`transcrypt_out`][spindle_token.transcrypt_out]
+    to transcrypt the ephemeral tokens such that they will match other datasets tokenized with the same private key.
 
     Arguments:
         df:
-            Spark `DataFrame` with ephemeral token columns to transcode.
+            Spark `DataFrame` with ephemeral token columns to transcrypt.
         tokens:
             A collection of [`Token`][spindle_token.core.Token] objects that denote which columns of the input dataframe
-            will be transcoded from ephemeral tokens into normal tokens.
+            will be transcrypted from ephemeral tokens into normal tokens.
         private_key:
             Your private RSA key. Must be the corresponding private key for the public key given to the sender when calling
-            `transcode_out`. This argument should only be set when reading from a secrets manager or testing, otherwise it is
+            `transcrypt_out`. This argument should only be set when reading from a secrets manager or testing, otherwise it is
             recommended to set the SPINDLE_TOKEN_PRIVATE_KEY environment variable with your private key.
 
     Returns:
@@ -198,7 +199,34 @@ def transcode_in(
     protocols = _bound_protocols(tokens, private_key, public_key=None)
     return df.withColumns(
         {
-            token.name: protocols[token.protocol.factory_id].transcode_in(col(token.name))
+            token.name: protocols[token.protocol.factory_id].transcrypt_in(col(token.name))
             for token in tokens
         }
     )
+
+
+def transcode_out(
+    df: DataFrame,
+    tokens: Iterable[Token],
+    recipient_public_key: bytes | None = None,
+    private_key: bytes | None = None,
+) -> DataFrame:
+    warn(
+        "transcode_out() is deprecated; use transcrypt_out() instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return transcrypt_out(df, tokens, recipient_public_key, private_key)
+
+
+def transcode_in(
+    df: DataFrame,
+    tokens: Iterable[Token],
+    private_key: bytes | None = None,
+) -> DataFrame:
+    warn(
+        "transcode_in() is deprecated; use transcrypt_in() instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return transcrypt_in(df, tokens, private_key)
