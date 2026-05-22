@@ -210,7 +210,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/Spindle-Health/carduus" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
@@ -256,7 +256,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/Spindle-Health/carduus" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
@@ -1136,11 +1136,14 @@
 <h2 id="rationale">Rationale</h2>
 <p>Privacy Preserving Record Linkage (PPRL) is crucial component to data de-identification systems. PPRL obfuscates identifying attributes or other sensitive information about the subjects described in the records of a dataset while still preserving the ability to link records pertaining to the same subject through the use of an encrypted token. This practice is sometimes referred to as "tokenization" and is one of the components of data de-identification.</p>
 <p>The task of PPRL is to replace the attributes of a every record denoting Personally Identifiable Information (PII) with a token produced by a one-way cryptographic function. This prevents observers of the tokenized data from obtaining the PII. The tokens are produced deterministically such that input records with the same, or similar, PII attributes will produce an identical token. This allows practitioners to associate records across datasets that are highly likely to belong to the same data subject without having access to PII.</p>
-<p>Tokenization is also used when data is shared between organizations to limit, or in some cases fully mitigate, the risk of subject re-identification in the event that an untrusted third party gains access to a dataset containing sensitive data. Each party produces encrypted tokens using a different secret key so that any compromised data asset is, at worst, only matchable to other datasets maintained by the same party. During data sharing transactions, a specific "transcode" data flow is used to re-encrypt the sender's tokens into ephemeral tokens that do not match tokens in any other dataset and can only be ingested using the recipients secret key. At no point in the "transcode" data flow is the original PII used.</p>
+<p>Tokenization is also used when data is shared between organizations to limit, or in some cases fully mitigate, the risk of subject re-identification in the event that an untrusted third party gains access to a dataset containing sensitive data. Each party produces encrypted tokens using a different secret key so that any compromised data asset is, at worst, only matchable to other datasets maintained by the same party. During data sharing transactions, a specific "transcrypt" data flow is used to re-encrypt the sender's tokens into ephemeral tokens that do not match tokens in any other dataset and can only be ingested using the recipients secret key. At no point in the "transcrypt" data flow is the original PII used.</p>
 <p>The spindle-token is the canonical implementation of the <a href="https://token.spindlehealth.com/opprl/PROTOCOL/">Open Privacy Preserving Record Linkage</a> (OPPRL) protocol. This protocol presents a standardized methodology for tokenization that can be implemented in any data system to increase interoperability. The spindle-token implementation is a python library that distributes tokenization workloads using apache <a href="https://spark.apache.org/">Spark</a> across multiple cores or multiple machines in a high performance computing cluster for efficient tokenization of any scale datasets.</p>
-<p>For Spark-backed tokenization and transcode workflows, install the optional Spark extra:</p>
+<p>For Spark-backed tokenization and transcrypt workflows, install the optional Spark extra:</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;spindle-token[spark]&quot;</span>
 </code></pre></div>
+<p>Use <code>transcrypt_out()</code> and <code>transcrypt_in()</code> for data-sharing workflows. The
+older <code>transcode_out()</code> and <code>transcode_in()</code> names remain available as
+deprecated compatibility aliases.</p>
 <p>The base <code>spindle-token</code> package remains importable without Spark so non-Spark
 environments and serverless dependency checks do not need to pull in PySpark.</p>
 <p>Applications that only need OPPRL token metadata can inspect supported V2 token
@@ -1161,7 +1164,7 @@ small mechanical change:</p>
 <ol>
 <li>Replace <code>OpprlV1</code> imports with <code>OpprlV2</code>.</li>
 <li>Keep the same attribute mapping and token selection.</li>
-<li>Re-run your tokenization and transcode tests against your existing data.</li>
+<li>Re-run your tokenization and transcrypt tests against your existing data.</li>
 </ol>
 <p><code>OpprlV2</code> preserves the V1 token structure and normalization rules, but it
 canonicalizes the private key before deriving the AES key. That means V2 is the

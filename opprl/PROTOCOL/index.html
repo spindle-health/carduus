@@ -212,7 +212,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/Spindle-Health/carduus" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
@@ -258,7 +258,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/Spindle-Health/carduus" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
@@ -1004,11 +1004,11 @@ re-identification in the event an untrusted third party gains access to
 a dataset containing sensitive data. Each party produces encrypted
 tokens using a different secret key so that any compromised data asset
 is, at worst, only matchable to other datasets maintained by the same
-party. During data sharing transactions, a specific “transcode” data
+party. During data sharing transactions, a specific “transcrypt” data
 flow is used to first re-encrypt the sender’s tokens into ephemeral
 tokens that do not match tokens in any other dataset and can only be
 ingested using the recipient’s secret key. At no point in the
-“transcode” data flow is the original PII used.</p>
+“transcrypt” data flow is the original PII used.</p>
 <h1 id="2-glossary">2. Glossary</h1>
 <p><strong>Asymmetric Encryption:</strong> Encryption using a pair of keys: a public key
 for encryption and a private key for decryption. Allows secure
@@ -1024,7 +1024,7 @@ a first name attribute. </p>
 <p><strong>Ephemeral Token:</strong> A token produced with
 non-deterministic encryption (ie. RSA with OAEP and MGF1) that is used
 when data is in transit from a sender to recipient. Ephemeral tokens
-cannot be used for record linkage until they are transcoded into normal
+cannot be used for record linkage until they are transcrypted into normal
 tokens by the recipient.</p>
 <p><strong>Implementer:</strong> An individual or organization that creates a software
 tool that implements this specification.</p>
@@ -1047,10 +1047,10 @@ requires secure key exchange. </p>
 <p><strong>Token:</strong> A string of text produced by
 encrypting the hash of concatenated, normalized PII fields. Used
 deterministically for record linkage.</p>
-<p><strong>Transcode:</strong> The process of securely transforming tokens encrypted
+<p><strong>Transcrypt:</strong> The process of securely transforming tokens encrypted
 with a sender’s key into tokens encrypted with a recipient’s key,
 enabling linkage without sharing private keys or PII. Data being
-transcoded has ephemeral tokens while in transit.</p>
+transcrypted has ephemeral tokens while in transit.</p>
 <p><strong>User:</strong> The end user of an OPPRL implementation. May refer to an
 individual or organization.</p>
 <h1 id="3-encryption-keys"><a name="keys"></a> 3. Encryption Keys</h1>
@@ -1540,7 +1540,7 @@ that they must appear in the joined PII string in
 <p><strong>Token 13</strong>: Health Plan Group Number, Health Plan Member ID</p>
 </li>
 </ul>
-<h1 id="7-transcoding-tokens"><a name="transcode"></a> 7. Transcoding Tokens</h1>
+<h1 id="7-transcrypting-tokens"><a name="transcode"></a> 7. Transcrypting Tokens</h1>
 <p>A key function of Privacy Preserving Record Linkage (PPRL) is the
 ability to associate records describing the same Subject without
 requiring knowledge of the Subject’s identity. This task is commonly
@@ -1556,7 +1556,7 @@ OPPRL tokens are protected by the fact that their data assets contain
 different token values for the same subjects.</p>
 <p>To enable cross-custodian data linking without introducing a universal
 token representation that could be used by untrusted third parties, a
-“transcode” cryptographic workflow is performed in coordination between
+“transcrypt” cryptographic workflow is performed in coordination between
 Custodian and Recipient. The workflow is broken up into 2 data flows:
 one performed by the Custodian to prepare data to be shared, and one
 performed by the recipient to create linkable tokenized records.</p>
@@ -1636,7 +1636,7 @@ recommended. </p>
 <p>Users should consider periodically rotating encryption keys to reduce
 the volume of data encrypted with a single key and shorten the window
 of vulnerability for a compromised key.</p>
-<p>User’s can perform a one-time Transcoding workflow as described in
+<p>User’s can perform a one-time Transcryption workflow as described in
 <a href="#transcode" class="ref">Section 7</a> where the user acts as both the
 sending Custodian and the Recipient.</p>
 <p>After rotating encryption keys, users must share their new public RSA
@@ -1645,7 +1645,7 @@ key with the custodians that send them data. </p>
 data custodian's sending data should communicate which public
 key they are using. This communication can happen out-of-band or the sender 
 can include some form of <a href="https://en.wikipedia.org/wiki/Checksum">checksum</a> 
-generated from the public key used to transcode the tokens into ephemeral
+generated from the public key used to transcrypt the tokens into ephemeral
 tokens. This is currently out of scope for the OPPRL protocol.</p>
 <h1 id="references">References</h1>
 <p>[FIPS 202]

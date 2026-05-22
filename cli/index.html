@@ -212,7 +212,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/Spindle-Health/carduus" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
@@ -258,7 +258,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/Spindle-Health/carduus" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
@@ -956,7 +956,7 @@
 
 <h1 id="command-line-interface">Command Line Interface</h1>
 <p>The spindle-token command line interface (CLI) offers tokenization and token
-transcoding capabilities of data files from the local file system. Install the
+transcryption capabilities of data files from the local file system. Install the
 optional <code>spark</code> extra to run the CLI commands:</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;spindle-token[spark]&quot;</span>
 </code></pre></div>
@@ -968,7 +968,7 @@ Make sure the python interpreter directory is on your PATH.</p>
 <p>You can test your installation and environment setup by running the <code>--help</code> command. You should see documentation about the spindle-token CLI.</p>
 <div class="highlight"><pre><span></span><code>spindle-token --help
 </code></pre></div>
-<p>Once installed, you can run the commands for <code>tokenize</code> and <code>transcode</code> with the relevant options and arguments. All commands and sub-commands follow the same general design. Positional arguments and paths the the input data and desired location to write output data. Options configure how the input data is transformed. For example, options dictate which tokens should be generated, which file format to use, and the encryption key.</p>
+<p>Once installed, you can run the commands for <code>tokenize</code> and <code>transcrypt</code> with the relevant options and arguments. All commands and sub-commands follow the same general design. Positional arguments and paths the the input data and desired location to write output data. Options configure how the input data is transformed. For example, options dictate which tokens should be generated, which file format to use, and the encryption key.</p>
 <p>This example invocation of the <code>tokenize</code> command illustrates the general pattern.</p>
 <div class="highlight"><pre><span></span><code>spindle-token tokenize \
     --token opprl_token_1v2 --token opprl_token_2v2 --token opprl_token_3v2 \
@@ -1051,10 +1051,10 @@ containing a dataset partitioned into files.</p>
                               cores.
   --help                      Show this message and exit.
 </code></pre></div>
-<h2 id="spindle-token-transcode">spindle-token transcode</h2>
+<h2 id="spindle-token-transcrypt">spindle-token transcrypt</h2>
 <p>Prepare tokenized datasets to be sent or received.</p>
 <p><strong>Usage:</strong></p>
-<div class="highlight"><pre><span></span><code>spindle-token transcode [OPTIONS] COMMAND [ARGS]...
+<div class="highlight"><pre><span></span><code>spindle-token transcrypt [OPTIONS] COMMAND [ARGS]...
 </code></pre></div>
 <p><strong>Options:</strong></p>
 <div class="highlight"><pre><span></span><code>  --help  Show this message and exit.
@@ -1062,11 +1062,11 @@ containing a dataset partitioned into files.</p>
 <h3 id="in">in</h3>
 <p>Convert a dataset of ephemeral tokens into tokens.</p>
 <p><strong>Usage:</strong></p>
-<div class="highlight"><pre><span></span><code>spindle-token transcode in [OPTIONS] INPUT OUTPUT
+<div class="highlight"><pre><span></span><code>spindle-token transcrypt in [OPTIONS] INPUT OUTPUT
 </code></pre></div>
 <p><strong>Options:</strong></p>
 <div class="highlight"><pre><span></span><code>  -t, --token TOKEN           The column name of an OPPRL token on the input
-                              data to transcode.  [required]
+                              data to transcrypt.  [required]
   -k, --key FILENAME          The PEM file containing your private key.
   -f, --format [parquet|csv]  The file format of input and output data files.
                               [required]
@@ -1080,11 +1080,11 @@ containing a dataset partitioned into files.</p>
 <h3 id="out">out</h3>
 <p>Prepare ephemeral tokens for a specific recipient.</p>
 <p><strong>Usage:</strong></p>
-<div class="highlight"><pre><span></span><code>spindle-token transcode out [OPTIONS] INPUT OUTPUT
+<div class="highlight"><pre><span></span><code>spindle-token transcrypt out [OPTIONS] INPUT OUTPUT
 </code></pre></div>
 <p><strong>Options:</strong></p>
 <div class="highlight"><pre><span></span><code>  -t, --token TOKEN           The column name of an OPPRL token on the input
-                              data to transcode.  [required]
+                              data to transcrypt.  [required]
   -r, --recipient FILENAME    The PEM file containing the recipients public
                               key.
   -k, --key FILENAME          The PEM file containing your private key.
@@ -1097,6 +1097,8 @@ containing a dataset partitioned into files.</p>
                               cores.
   --help                      Show this message and exit.
 </code></pre></div>
+<p><code>spindle-token transcode</code> is retained as a deprecated compatibility alias for
+<code>spindle-token transcrypt</code>.</p>
 <h1 id="limitations">Limitations</h1>
 <p>The following limitations of the spindle-token CLI are. For a superior experience, consider using spindle-token as a Python library. If your use case requires addressing some of these limitations, please open an <a href="https://github.com/spindle-health/spindle-token/issues">issue</a> with additional details. </p>
 <h3 id="no-horizontal-scaling">No Horizontal Scaling</h3>

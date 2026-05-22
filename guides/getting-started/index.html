@@ -212,7 +212,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/Spindle-Health/carduus" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
@@ -258,7 +258,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/Spindle-Health/carduus" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
@@ -401,13 +401,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#transcoding-and-ephemeral-tokens" class="md-nav__link">
+  <a href="#transcryption-and-ephemeral-tokens" class="md-nav__link">
     <span class="md-ellipsis">
-      Transcoding and Ephemeral Tokens
+      Transcryption and Ephemeral Tokens
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Transcoding and Ephemeral Tokens">
+    <nav class="md-nav" aria-label="Transcryption and Ephemeral Tokens">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1129,13 +1129,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#transcoding-and-ephemeral-tokens" class="md-nav__link">
+  <a href="#transcryption-and-ephemeral-tokens" class="md-nav__link">
     <span class="md-ellipsis">
-      Transcoding and Ephemeral Tokens
+      Transcryption and Ephemeral Tokens
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Transcoding and Ephemeral Tokens">
+    <nav class="md-nav" aria-label="Transcryption and Ephemeral Tokens">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1199,7 +1199,7 @@
 
 
 <h1 id="getting-started">Getting Started</h1>
-<p>This guide provides installation instructions and a quick tour of the main features of spindle-token. </p>
+<p>This guide provides installation instructions and a quick tour of the main features of spindle-token.</p>
 <h2 id="installation">Installation</h2>
 <p>Spindle-token is a cross-platform python library built on top of <a href="https://spark.apache.org/docs/latest/api/python/index.html">PySpark</a>. It has been validated with the following Spark runtimes:</p>
 <ul>
@@ -1211,7 +1211,7 @@
 </code></pre></div>
 <p>If you only need the pure-Python helpers such as version inspection or PEM key
 generation, you can install the base package with <code>pip install spindle-token</code>.
-Spark-backed tokenization and transcode APIs require the <code>spark</code> extra.</p>
+Spark-backed tokenization and transcrypt APIs require the <code>spark</code> extra.</p>
 <p>If your dependency scanner reports warnings about <code>oci</code> or <code>pyOpenSSL</code>, those are not
 direct runtime dependencies of spindle-token. In normal Spark usage, they usually come
 from other packages in the environment and do not affect spindle-token unless your own
@@ -1225,7 +1225,7 @@ on it.</p>
 <p>Tokenization is a specific use case of cryptography and relies on encryption keys. Spindle-token users are expected to provision and manage their own encryption keys.</p>
 <p>There are 3 kinds of encryption keys that play different roles:</p>
 <ol>
-<li>Your private RSA key - Used to transcode incoming data and derive a symmetric encryption key used to tokenize PII. <strong>This key must never be shared or accessed by untrusted parties.</strong></li>
+<li>Your private RSA key - Used to transcrypt incoming data and derive a symmetric encryption key used to tokenize PII. <strong>This key must never be shared or accessed by untrusted parties.</strong></li>
 <li>Your public RSA key - The public key counterpart to your private key. This key will be shared with trusted parties that will be sending you tokenized data.</li>
 <li>Trusted partner public keys - A collection of public keys from the various trusted parties that you will be sending tokenized to.</li>
 </ol>
@@ -1233,15 +1233,15 @@ on it.</p>
 <p>Organization's often manage encryption keys using a secrets manager, such as <a href="https://aws.amazon.com/secrets-manager/">AWS Secrets Manger</a>, <a href="https://www.hashicorp.com/en/products/vault">HashiCorp Vault</a>, <a href="https://docs.databricks.com/aws/en/security/secrets/">Databricks Secrets Manger</a>, and <a href="https://www.envkey.com/">EnvKey</a>. It is recommended that spindle-token users adopt a secrets manager in order to control which principals have access to encryption keys.</p>
 <p>To help encourage users to not hard-code encryption keys in their source code, spindle-token will default to reading encryption keys from environment variables. Most secrets managers support the pattern of injecting secrets as ephemeral environment variables and the use of an <code>.env</code> file on developer workstations allow for easy local development. You can set the <code>SPINDLE_TOKEN_PRIVATE_KEY</code> environment variable with a private RSA keys in the PEM format.</p>
 <p>In some cases, it may be appropriate to explicitly pass the private keys as arguments to the relevant spindle-token functions. For example, if your organization's secret manager encourages programmatic access at runtime or if you are overriding the encryption key during testing. Spindle-token functions support the explicit passing of encryption keys as <code>bytes</code> but it is highly recommended that users do not hardcode encryption keys into source code or put PEM files with production encryption keys into version control.</p>
-<p>This guide assumes that your private key is set via the <code>SPINDLE_TOKEN_PRIVATE_KEY</code> environment variable. For information about passing the private key as an explicit argument, see the spindle-token <a href="../../api/">API</a> documentation. </p>
-<p>Public keys don't need to be managed as secrets. It is possible to specify the public key (in PEM format) for your intended data recipient with the <code>SPINDLE_TOKEN_RECIPIENT_PUBLIC_KEY</code> environment variable or pass the public key to spindle-token functions as an explicit argument. Users can pick whichever method is more convenient. </p>
+<p>This guide assumes that your private key is set via the <code>SPINDLE_TOKEN_PRIVATE_KEY</code> environment variable. For information about passing the private key as an explicit argument, see the spindle-token <a href="../../api/">API</a> documentation.</p>
+<p>Public keys don't need to be managed as secrets. It is possible to specify the public key (in PEM format) for your intended data recipient with the <code>SPINDLE_TOKEN_RECIPIENT_PUBLIC_KEY</code> environment variable or pass the public key to spindle-token functions as an explicit argument. Users can pick whichever method is more convenient.</p>
 <h3 id="generating-new-keys">Generating New Keys</h3>
 <p>Spindle-token expects encryption keys to be represented with the <a href="https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail">PEM</a> encoding. Private keys should use the <a href="https://en.wikipedia.org/wiki/PKCS_8">PKCS #8</a> format and public keys should be formatted as <a href="https://www.rfc-editor.org/rfc/rfc5280#section-4.1">SubjectPublicKeyInfo</a>. It is recommended to use a key size of 2048 bits.</p>
 <p>You can generate these keys using tools like <a href="https://www.openssl.org/"><code>openssl</code></a> or by calling the <code>generate_pem_keys</code> function provided by spindle-token. This function will return a <code>tuple</code> containing 2 instances of <code>bytes</code>. The first is the PEM data for your private key that you must keep secret. The second is the PEM data for your public key that can may share with the parties you intend to receive data from.</p>
-<p>You can decode these keys into strings of text (using UTF-8) or write them into a <code>.pem</code> file for later use. </p>
+<p>You can decode these keys into strings of text (using UTF-8) or write them into a <code>.pem</code> file for later use.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">spindle_token</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_pem_keys</span>
 
-<span class="n">private</span><span class="p">,</span> <span class="n">public</span> <span class="o">=</span> <span class="n">generate_pem_keys</span><span class="p">()</span>  <span class="c1"># Or provide key_size= </span>
+<span class="n">private</span><span class="p">,</span> <span class="n">public</span> <span class="o">=</span> <span class="n">generate_pem_keys</span><span class="p">()</span>  <span class="c1"># Or provide key_size=</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">private</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
 <span class="c1"># -----BEGIN PRIVATE KEY-----</span>
@@ -1328,22 +1328,25 @@ on it.</p>
 </tbody>
 </table>
 <blockquote>
-<p><img alt="💡" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4a1.svg" title=":bulb:" /> <strong>Why multiple tokens?</strong> </p>
+<p><img alt="💡" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4a1.svg" title=":bulb:" /> <strong>Why multiple tokens?</strong></p>
 <p>Each use case has a different tolerance for false positive and false negative matches. By producing multiple tokens for each record using PII attributes, each user can customize their match logic to trade-off between different kinds of match errors. Linking records that match on <em>any</em> token will result in fewer false negatives, and linking records that match <em>all</em> tokens will result in fewer false positives. User can design their own match strategies by using subsets of tokens.</p>
 </blockquote>
 <p>If you need the same-key stability fix described in the security findings, use <code>OpprlV2</code> instead of <code>OpprlV1</code>. The examples in this guide now use V2, and V1 remains available for historical compatibility checks.</p>
-<h2 id="transcoding-and-ephemeral-tokens">Transcoding and Ephemeral Tokens</h2>
-<p>Tokens generated by a given private key can be transcoded into tokens that match those of another private key through a "transcoding" protocol. This process is most commonly done in the context of data sharing.</p>
-<p>Transcoding is performed when a user wants to share tokenized data with another party. The sender and recipient each have a corresponding transcode function that must be invoked to ensure safe transfer of data between trusted parties. The sender transcodes their tokens into "ephemeral tokens" that are specific to the transaction. In other words, the ephemeral tokens do not match the sender's data, the recipients data, or any prior ephemeral token from any <em>any</em> transactions between <em>any</em> sender and recipient. </p>
-<p>Furthermore, records from the same dataset that have identical PII will be assigned unique ephemeral tokens. This destroys the utility of the tokens until the recipient performs the reverse transcoding process using their private key. This is beneficial in the event that a third party gains access to the dataset during transfer (eg. if transcoded datasets are delivered over an insecure connection) because records pertaining to the same subject cannot be associated with each other.</p>
+<h2 id="transcryption-and-ephemeral-tokens">Transcryption and Ephemeral Tokens</h2>
+<p>New code should use <code>transcrypt_out</code> and <code>transcrypt_in</code>. The previous
+<code>transcode_out</code> and <code>transcode_in</code> names remain available as deprecated
+compatibility aliases.</p>
+<p>Tokens generated by a given private key can be transcrypted into tokens that match those of another private key through a "transcryption" protocol. This process is most commonly done in the context of data sharing.</p>
+<p>Transcryption is performed when a user wants to share tokenized data with another party. The sender and recipient each have a corresponding transcrypt function that must be invoked to ensure safe transfer of data between trusted parties. The sender transcrypts their tokens into "ephemeral tokens" that are specific to the transaction. In other words, the ephemeral tokens do not match the sender's data, the recipients data, or any prior ephemeral token from any <em>any</em> transactions between <em>any</em> sender and recipient.</p>
+<p>Furthermore, records from the same dataset that have identical PII will be assigned unique ephemeral tokens. This destroys the utility of the tokens until the recipient performs the reverse transcryption process using their private key. This is beneficial in the event that a third party gains access to the dataset during transfer (eg. if transcrypted datasets are delivered over an insecure connection) because records pertaining to the same subject cannot be associated with each other.</p>
 <h3 id="sender">Sender</h3>
-<p>Spindle-token provides the <code>transcode_out</code> function in for the sender to call on their tokenized datasets. In the following code snippet, notice the 2 records pertaining to the same subject (<code>label = 1</code>) no longer have identical tokens. The <code>tokens_to_send</code> DataFrame can safely be written files or a database and delivered to the recipient.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">spindle_token</span><span class="w"> </span><span class="kn">import</span> <span class="n">transcode_out</span>
+<p>Spindle-token provides the <code>transcrypt_out</code> function in for the sender to call on their tokenized datasets. In the following code snippet, notice the 2 records pertaining to the same subject (<code>label = 1</code>) no longer have identical tokens. The <code>tokens_to_send</code> DataFrame can safely be written files or a database and delivered to the recipient.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">spindle_token</span><span class="w"> </span><span class="kn">import</span> <span class="n">transcrypt_out</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">spindle_token.opprl</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpprlV2</span>
 
-<span class="n">tokens_to_send</span> <span class="o">=</span> <span class="n">transcode_out</span><span class="p">(</span>
-    <span class="n">tokens</span><span class="p">,</span> 
-    <span class="n">tokens</span><span class="o">=</span><span class="p">(</span><span class="n">OpprlV2</span><span class="o">.</span><span class="n">token1</span><span class="p">,</span> <span class="n">OpprlV2</span><span class="o">.</span><span class="n">token2</span><span class="p">,</span> <span class="n">OpprlV2</span><span class="o">.</span><span class="n">token3</span><span class="p">),</span> 
+<span class="n">tokens_to_send</span> <span class="o">=</span> <span class="n">transcrypt_out</span><span class="p">(</span>
+    <span class="n">tokens</span><span class="p">,</span>
+    <span class="n">tokens</span><span class="o">=</span><span class="p">(</span><span class="n">OpprlV2</span><span class="o">.</span><span class="n">token1</span><span class="p">,</span> <span class="n">OpprlV2</span><span class="o">.</span><span class="n">token2</span><span class="p">,</span> <span class="n">OpprlV2</span><span class="o">.</span><span class="n">token3</span><span class="p">),</span>
     <span class="n">recipient_public_key</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;&quot;-----BEGIN PUBLIC KEY----- ...&quot;&quot;&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">tokens</span><span class="o">.</span><span class="n">to_send</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1357,17 +1360,17 @@ on it.</p>
 <span class="c1"># |    4|...|...|...|</span>
 <span class="c1"># +-----+--------------------+--------------------+--------------------+</span>
 </code></pre></div>
-<p>The <code>tokens</code> argument is a iterable collection containing the token specifications of the tokens to transcode. It is expected that the input DataFrame has columns with the same name as the <code>name</code> attribute of the token specification. For example, <code>OpprlV2.token3.name</code> is <code>opprl_token_3v2</code> and therefore the DataFrame must contain a column with that name. See the OPPRL protocol for more information on understanding the token name format.</p>
-<p>The <code>recipient_public_key</code> argument is the public key provided by the intended recipient. </p>
+<p>The <code>tokens</code> argument is a iterable collection containing the token specifications of the tokens to transcrypt. It is expected that the input DataFrame has columns with the same name as the <code>name</code> attribute of the token specification. For example, <code>OpprlV2.token3.name</code> is <code>opprl_token_3v2</code> and therefore the DataFrame must contain a column with that name. See the OPPRL protocol for more information on understanding the token name format.</p>
+<p>The <code>recipient_public_key</code> argument is the public key provided by the intended recipient.</p>
 <h3 id="recipient">Recipient</h3>
-<p>The <code>transcode_in</code> function provides the transcoding process for the recipient. It is called on a dataset produced by the sender using <code>transcode_out</code> to convert ephemeral tokens into normal tokens that will match other tokenized datasets maintained by the recipient, including prior datasets delivered from the same sender.</p>
+<p>The <code>transcrypt_in</code> function provides the transcryption process for the recipient. It is called on a dataset produced by the sender using <code>transcrypt_out</code> to convert ephemeral tokens into normal tokens that will match other tokenized datasets maintained by the recipient, including prior datasets delivered from the same sender.</p>
 <p>Notice that the first 2 records pertaining to the same subject (label = 1) have identical tokens again, but do these tokens are not the same as the original tokens because they are encrypted with the scheme for the recipient.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">spindle_token</span><span class="w"> </span><span class="kn">import</span> <span class="n">transcode_in</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">spindle_token</span><span class="w"> </span><span class="kn">import</span> <span class="n">transcrypt_in</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">spindle_token.opprl</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpprlV2</span>
 
 <span class="n">tokens_received</span> <span class="o">=</span> <span class="n">transcrypt_in</span><span class="p">(</span>
-    <span class="n">tokens_to_send</span><span class="p">,</span> 
-    <span class="n">tokens</span><span class="o">=</span><span class="p">(</span><span class="n">OpprlV2</span><span class="o">.</span><span class="n">token1</span><span class="p">,</span> <span class="n">OpprlV2</span><span class="o">.</span><span class="n">token2</span><span class="p">,</span> <span class="n">OpprlV2</span><span class="o">.</span><span class="n">token3</span><span class="p">),</span> 
+    <span class="n">tokens_to_send</span><span class="p">,</span>
+    <span class="n">tokens</span><span class="o">=</span><span class="p">(</span><span class="n">OpprlV2</span><span class="o">.</span><span class="n">token1</span><span class="p">,</span> <span class="n">OpprlV2</span><span class="o">.</span><span class="n">token2</span><span class="p">,</span> <span class="n">OpprlV2</span><span class="o">.</span><span class="n">token3</span><span class="p">),</span>
 <span class="p">)</span>
 <span class="n">tokens_received</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="c1"># +-----+--------------------+--------------------+--------------------+</span>
@@ -1380,9 +1383,9 @@ on it.</p>
 <span class="c1"># |    4|CgmXSDhY8mxZCRV+O...|wu+eNOqsOvh14Bjei...|7aGCrwy8tTDL3RkO6...|</span>
 <span class="c1"># +-----+--------------------+--------------------+--------------------+</span>
 </code></pre></div>
-<p>As with <code>transcode_out</code>, the <code>tokens</code> argument is a iterable collection containing the token specifications of the tokens to transcode. The input DataFrame is expected to include columns with names matching the  <code>.name</code> of each token specification.</p>
+<p>As with <code>transcrypt_out</code>, the <code>tokens</code> argument is a iterable collection containing the token specifications of the tokens to transcrypt. The input DataFrame is expected to include columns with names matching the  <code>.name</code> of each token specification.</p>
 <h2 id="deployment">Deployment</h2>
-<p>Spindle-token is a Python library that uses PySpark to parallelize and distribute the tokenization and transcode workloads. Your application that uses spindle-token can be submitted to any compatible Spark cluster, or use a connection to a remote spark cluster. Otherwise, spindle-health will start a local Spark process that uses the resources of the host machine.</p>
+<p>Spindle-token is a Python library that uses PySpark to parallelize and distribute the tokenization and transcrypt workloads. Your application that uses spindle-token can be submitted to any compatible Spark cluster, or use a connection to a remote spark cluster. Otherwise, spindle-health will start a local Spark process that uses the resources of the host machine.</p>
 <p>For more information about different modes of deployment, see the official Spark documentation.</p>
 <ul>
 <li><a href="https://spark.apache.org/docs/latest/submitting-applications.html">Submitting Applications to a Spark cluster</a></li>

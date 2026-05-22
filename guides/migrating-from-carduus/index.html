@@ -212,7 +212,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/Spindle-Health/carduus" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
@@ -258,7 +258,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/Spindle-Health/carduus" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
@@ -482,13 +482,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#transcoding" class="md-nav__link">
+  <a href="#transcryption" class="md-nav__link">
     <span class="md-ellipsis">
-      Transcoding
+      Transcryption
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Transcoding">
+    <nav class="md-nav" aria-label="Transcryption">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1050,13 +1050,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#transcoding" class="md-nav__link">
+  <a href="#transcryption" class="md-nav__link">
     <span class="md-ellipsis">
-      Transcoding
+      Transcryption
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Transcoding">
+    <nav class="md-nav" aria-label="Transcryption">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1144,9 +1144,9 @@ See <a href="https://github.com/spindle-health/spindle-token/pull/26">the pull r
 <p><strong>Protocol Versions -</strong> Spindle-token requires importing the <code>PiiAttribute</code> and <code>Token</code> objects for specific versions of OPPRL. Carduus only supports version 0 of the OPPRL specification.</p>
 <p><strong>Column mapping -</strong> Carduus <code>pii_transforms</code> use column names as keys and values are PII attribute annotations. This limits each column being used once which prevents different tokens from processing the columns in different ways (ie. using multiple versions of OPPRL at the same time). Spindle-token solves remove this limitation in <code>col_mapping</code> by using PII attributes as the keys and column names as the values.</p>
 <p><strong>Token Column Names -</strong> The spindle-token library produced token columns that have versioned names to distinguish which version of the OPPRL specification was used.</p>
-<h2 id="transcoding">Transcoding</h2>
-<p>The API for transcoding between tokens and ephemeral tokens is nearly identical in spindle-token and carduus.</p>
-<p>Carduus used the made-up verb "transcypt" instead of the more straightforward "transcode". The semantics are identical with respect to both projects and this guide will use "transcode".</p>
+<h2 id="transcryption">Transcryption</h2>
+<p>The API for transcrypting between tokens and ephemeral tokens is nearly identical in spindle-token and carduus.</p>
+<p>Carduus used <code>transcrypt_out</code> and <code>transcrypt_in</code> for this workflow. Spindle-token now uses the same public naming, with <code>transcode_out</code> and <code>transcode_in</code> retained as deprecated compatibility aliases.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># carduus</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">carduus.token</span><span class="w"> </span><span class="kn">import</span> <span class="n">transcrypt_out</span><span class="p">,</span> <span class="n">transcrypt_in</span><span class="p">,</span> <span class="n">OpprlPii</span><span class="p">,</span> <span class="n">OpprlToken</span>
 
@@ -1162,22 +1162,22 @@ See <a href="https://github.com/spindle-health/spindle-token/pull/26">the pull r
 <span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1"># spindle-health</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spindle_token</span><span class="w"> </span><span class="kn">import</span> <span class="n">transcode_out</span><span class="p">,</span> <span class="n">transcode_in</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">spindle_token</span><span class="w"> </span><span class="kn">import</span> <span class="n">transcrypt_out</span><span class="p">,</span> <span class="n">transcrypt_in</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">spindle_token.opprl</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpprlV0</span> <span class="k">as</span> <span class="n">v0</span>
 
-<span class="n">ephemeral_tokens</span> <span class="o">=</span> <span class="n">transcode_out</span><span class="p">(</span>
+<span class="n">ephemeral_tokens</span> <span class="o">=</span> <span class="n">transcrypt_out</span><span class="p">(</span>
     <span class="n">tokens</span><span class="p">,</span> 
     <span class="n">tokens</span><span class="o">=</span><span class="p">(</span><span class="n">v0</span><span class="o">.</span><span class="n">token1</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">token2</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">token3</span><span class="p">),</span> 
     <span class="n">recipient_public_key</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;&quot;-----BEGIN PUBLIC KEY----- ...&quot;&quot;&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">tokens</span> <span class="o">=</span> <span class="n">transcode_in</span><span class="p">(</span>
+<span class="n">tokens</span> <span class="o">=</span> <span class="n">transcrypt_in</span><span class="p">(</span>
     <span class="n">ephemeral_tokens</span><span class="p">,</span> 
     <span class="n">tokens</span><span class="o">=</span><span class="p">(</span><span class="n">v0</span><span class="o">.</span><span class="n">token1</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">token2</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">token3</span><span class="p">),</span> 
 <span class="p">)</span>
 </code></pre></div>
 <h3 id="key-difference_1">Key Difference</h3>
-<p><strong>Specifying Tokens -</strong> Carduus only supported one method of transcoding tokens and therefore the API only required the names of columns containing tokens to transcode. Spindle-token allows each token to use its own protocol (ie. different versions of OPPRL) and thus the transcode functions need instances of <code>Token</code>. The column names are expected to match the <code>name</code> attribute of the <code>Token</code> instance.</p>
+<p><strong>Specifying Tokens -</strong> Carduus only supported one method of transcrypting tokens and therefore the API only required the names of columns containing tokens to transcrypt. Spindle-token allows each token to use its own protocol (ie. different versions of OPPRL) and thus the transcrypt functions need instances of <code>Token</code>. The column names are expected to match the <code>name</code> attribute of the <code>Token</code> instance.</p>
 
 
 
