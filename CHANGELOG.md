@@ -2,6 +2,25 @@
 
 All notable changes to `spindle-token` will be documented in this file.
 
+## 2.4.1
+
+### Security and Compatibility
+
+- Raised the minimum `cryptography` version to 49.0.0, excluding affected
+  releases that could incorrectly accept a wildcard DNS subject alternative
+  name outside an intermediate CA's permitted name constraint. The previous
+  lock already selected 46.0.6, which contained the upstream verifier fix, but
+  the published dependency range still allowed vulnerable 46.0.5.
+- Moved the lock beyond 46.0.6 to include the fix for CVE-2026-39892, where
+  passing non-contiguous Python buffers to supported APIs could cause a buffer
+  overflow.
+- Official `cryptography` wheels now use OpenSSL 4.0.1, including the OpenSSL
+  security updates first shipped in `cryptography` 48.0.1.
+  Source-distribution builds remain responsible for their linked OpenSSL
+  version.
+- Adopted the upstream 49.0.0 platform support boundary: `cryptography` no
+  longer publishes macOS x86-64 or 32-bit Windows wheels.
+
 ## 2.4.0
 
 ### API

@@ -11,8 +11,8 @@ Publish a focused `spindle-token` 2.4.1 patch release that excludes vulnerable
 - Bump the package version from 2.4.0 to 2.4.1 in `pyproject.toml` and
   `src/spindle_token/__init__.py`.
 - Add a 2.4.1 security section to `CHANGELOG.md` covering the X.509 DNS
-  name-constraint verifier flaw and the vulnerable OpenSSL bundled in older
-  upstream wheels.
+  name-constraint verifier flaw, CVE-2026-39892, and the vulnerable OpenSSL
+  bundled in older upstream wheels.
 - Leave `README.md` unchanged because installation and public usage do not
   change.
 
