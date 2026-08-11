@@ -1,0 +1,1334 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Cryptography 50 Security Release 2.4.2 Implementation Plan - Spindle Token</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-KTQKK1C4F3"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-KTQKK1C4F3",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-KTQKK1C4F3",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cryptography-50-security-release-242-implementation-plan" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Spindle Token" class="md-header__button md-logo" aria-label="Spindle Token" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Spindle Token
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cryptography 50 Security Release 2.4.2 Implementation Plan
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Spindle Token" class="md-nav__button md-logo" aria-label="Spindle Token" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Spindle Token
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/spindle-health/spindle-token" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/databricks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Spindle Token on Databricks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/custom-tokens/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Custom Tokens
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/migrating-from-carduus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Migrating from Carduus
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Command Line Interface
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    carduus (legacy)
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            carduus (legacy)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../carduus/guides/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_2">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../carduus/guides/databricks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Carduus on Databricks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../carduus/guides/custom-tokens/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Defining Token Specs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../carduus/api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Carduus API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../carduus/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Carduus CLI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    OPPRL
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            OPPRL
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../opprl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    About
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../opprl/PROTOCOL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Specification
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../opprl/contrib/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Project
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Project
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CODE_OF_CONDUCT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Code of Conduct
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../LICENSE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    License
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#global-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Constraints
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Global Constraints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-1-make-the-v242-package-contract-executable" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 1: Make the v2.4.2 package contract executable
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-2-verify-the-complete-release-candidate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 2: Verify the complete release candidate
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-3-merge-the-focused-release-pull-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 3: Merge the focused release pull request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-4-publish-and-verify-v242" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 4: Publish and verify v2.4.2
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="cryptography-50-security-release-242-implementation-plan">Cryptography 50 Security Release 2.4.2 Implementation Plan</h1>
+<blockquote>
+<p><strong>For agentic workers:</strong> REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (<code>- [ ]</code>) syntax for tracking.</p>
+</blockquote>
+<p><strong>Goal:</strong> Publish <code>spindle-token</code> 2.4.2 with a tested <code>cryptography &gt;=50.0.0,&lt;51.0.0</code> dependency contract.</p>
+<p><strong>Architecture:</strong> Keep the change packaging-only: prove the new release contract with existing import and built-wheel boundaries, synchronize release metadata and the Poetry lock, and verify the complete distributable. Deliver through the repository's pull-request gate, then tag and publish PyPI, documentation, and GitHub artifacts in dependency order.</p>
+<p><strong>Tech Stack:</strong> Python 3.13, Poetry 2, cryptography 50.0.0, PySpark 3.5.2, SDKMAN Temurin 17, pytest, MkDocs, Git, GitHub CLI, PyPI, Databricks.</p>
+<h2 id="global-constraints">Global Constraints</h2>
+<ul>
+<li>Release version is exactly <code>2.4.2</code>.</li>
+<li>Require <code>cryptography &gt;=50.0.0,&lt;51.0.0</code> and lock version 50.0.0.</li>
+<li>Keep runtime APIs and token behavior unchanged.</li>
+<li>Do not change installation or usage documentation unless verification identifies a user-visible change.</li>
+<li>Do not publish to PyPI until the built wheel passes the Databricks notebook gate.</li>
+<li>If PyPI publication fails, do not deploy documentation or publish the GitHub release.</li>
+<li>Never expose or persist PyPI or Databricks credentials in source, logs, documentation, or assistant output.</li>
+</ul>
+<hr />
+<h3 id="task-1-make-the-v242-package-contract-executable">Task 1: Make the v2.4.2 package contract executable</h3>
+<p><strong>Files:</strong>
+- Modify: <code>tests/test_import_surface.py</code>
+- Modify: <code>tests/test_packaging_integration.py</code>
+- Modify: <code>pyproject.toml</code>
+- Modify: <code>src/spindle_token/__init__.py</code>
+- Modify: <code>poetry.lock</code>
+- Modify: <code>CHANGELOG.md</code>
+- Commit: <code>docs/superpowers/plans/2026-08-11-cryptography-50-security-release.md</code></p>
+<p><strong>Interfaces:</strong>
+- Consumes: current version <code>2.4.1</code> and dependency range <code>cryptography &gt;=49.0.0,&lt;50.0.0</code>.
+- Produces: import version <code>2.4.2</code> and wheel metadata containing <code>Requires-Dist: cryptography (&gt;=50.0.0,&lt;51.0.0)</code>.</p>
+<ul>
+<li>[x] <strong>Step 1: Change the import-boundary assertion first</strong></li>
+</ul>
+<p>In <code>tests/test_import_surface.py</code>, change only the subprocess assertion to:</p>
+<div class="highlight"><pre><span></span><code><span class="k">assert</span> <span class="n">spindle_token</span><span class="o">.</span><span class="n">__version__</span> <span class="o">==</span> <span class="s2">&quot;2.4.2&quot;</span>
+</code></pre></div>
+<ul>
+<li>[x] <strong>Step 2: Run the import test and verify RED</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_import_surface.py::test_base_package_imports_without_pyspark<span class="w"> </span>-q
+</code></pre></div>
+<p>Expected: FAIL because the imported package still reports <code>2.4.1</code>.</p>
+<ul>
+<li>[x] <strong>Step 3: Add the built-wheel dependency assertion first</strong></li>
+</ul>
+<p>In <code>tests/test_packaging_integration.py</code>, add this assertion after reading <code>METADATA</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">assert</span> <span class="s2">&quot;Requires-Dist: cryptography (&gt;=50.0.0,&lt;51.0.0)&quot;</span> <span class="ow">in</span> <span class="n">metadata</span>
+</code></pre></div>
+<ul>
+<li>[x] <strong>Step 4: Run the packaging test and verify RED</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_packaging_integration.py::test_wheel_metadata_marks_pyspark_as_spark_extra_only<span class="w"> </span>-q
+</code></pre></div>
+<p>Expected: FAIL because the built wheel still declares <code>cryptography (&gt;=49.0.0,&lt;50.0.0)</code>.</p>
+<ul>
+<li>[x] <strong>Step 5: Apply the minimal release metadata changes</strong></li>
+</ul>
+<p>In <code>pyproject.toml</code>, set:</p>
+<div class="highlight"><pre><span></span><code><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;2.4.2&quot;</span>
+</code></pre></div>
+<p>and:</p>
+<div class="highlight"><pre><span></span><code><span class="s2">&quot;cryptography (&gt;=50.0.0,&lt;51.0.0)&quot;</span><span class="err">,</span>
+</code></pre></div>
+<p>In <code>src/spindle_token/__init__.py</code>, set:</p>
+<div class="highlight"><pre><span></span><code><span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;2.4.2&quot;</span>
+</code></pre></div>
+<ul>
+<li>[x] <strong>Step 6: Add the focused changelog entry</strong></li>
+</ul>
+<p>Insert the following before <code>## 2.4.1</code> in <code>CHANGELOG.md</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="gu">## 2.4.2</span>
+
+<span class="gu">### Security and Compatibility</span>
+
+<span class="k">-</span><span class="w"> </span>Raised the minimum <span class="sb">`cryptography`</span> version to 50.0.0, which fixes
+  CVE-2026-69247 by preventing distinguishable errors or timing during PKCS7
+  encrypted-key unwrap from acting as a Bleichenbacher oracle.
+<span class="k">-</span><span class="w"> </span>Adopted the upstream deprecation of finite-field Diffie-Hellman key exchange.
+  <span class="sb">`spindle-token`</span> does not use the deprecated FFDH APIs.
+</code></pre></div>
+<ul>
+<li>[x] <strong>Step 7: Regenerate and validate the lock</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>lock
+poetry<span class="w"> </span>check<span class="w"> </span>--lock
+</code></pre></div>
+<p>Expected: both commands exit zero and <code>poetry.lock</code> selects cryptography 50.0.0.</p>
+<ul>
+<li>[x] <strong>Step 8: Run both release-contract tests and verify GREEN</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_import_surface.py::test_base_package_imports_without_pyspark<span class="w"> </span>tests/test_packaging_integration.py::test_wheel_metadata_marks_pyspark_as_spark_extra_only<span class="w"> </span>-q
+</code></pre></div>
+<p>Expected: 2 tests pass.</p>
+<ul>
+<li>[x] <strong>Step 9: Commit the tested release contract</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>CHANGELOG.md<span class="w"> </span>pyproject.toml<span class="w"> </span>poetry.lock<span class="w"> </span>src/spindle_token/__init__.py<span class="w"> </span>tests/test_import_surface.py<span class="w"> </span>tests/test_packaging_integration.py<span class="w"> </span>docs/superpowers/plans/2026-08-11-cryptography-50-security-release.md
+git<span class="w"> </span>diff<span class="w"> </span>--cached<span class="w"> </span>--check
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore: prepare 2.4.2 security release&quot;</span>
+</code></pre></div>
+<h3 id="task-2-verify-the-complete-release-candidate">Task 2: Verify the complete release candidate</h3>
+<p><strong>Files:</strong>
+- Verify: all tracked project files.
+- Generate temporarily: <code>dist/</code>, <code>site/</code>.</p>
+<p><strong>Interfaces:</strong>
+- Consumes: the v2.4.2 release contract from Task 1.
+- Produces: verified wheel and sdist artifacts plus a successful Databricks notebook result.</p>
+<ul>
+<li>[ ] <strong>Step 1: Confirm affected APIs are unreachable in production code</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>rg<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;pkcs7|PKCS7|asymmetric\\.dh|Diffie|DHPrivate|DHPublic&quot;</span><span class="w"> </span>src<span class="w"> </span>tests
+</code></pre></div>
+<p>Expected: no matches.</p>
+<ul>
+<li>[ ] <strong>Step 2: Confirm declared, locked, and installed dependency state</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>install
+poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import cryptography, pathlib, tomllib; p=tomllib.loads(pathlib.Path(&quot;pyproject.toml&quot;).read_text()); lock=tomllib.loads(pathlib.Path(&quot;poetry.lock&quot;).read_text()); locked=next(x for x in lock[&quot;package&quot;] if x[&quot;name&quot;] == &quot;cryptography&quot;); assert p[&quot;project&quot;][&quot;version&quot;] == &quot;2.4.2&quot;; assert &quot;cryptography (&gt;=50.0.0,&lt;51.0.0)&quot; in p[&quot;project&quot;][&quot;dependencies&quot;]; assert locked[&quot;version&quot;] == &quot;50.0.0&quot;; assert cryptography.__version__ == &quot;50.0.0&quot;; print(cryptography.__version__)&#39;</span>
+</code></pre></div>
+<p>Expected: exit zero and output <code>50.0.0</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Run the full test suite under JDK 17</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">JAVA_HOME</span><span class="o">=</span>/Users/erikdreyer/.sdkman/candidates/java/17.0.20-tem<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest
+</code></pre></div>
+<p>Expected: all tests pass with zero failures.</p>
+<ul>
+<li>[ ] <strong>Step 4: Run formatting, package, and documentation checks</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>black<span class="w"> </span>--check<span class="w"> </span>.
+poetry<span class="w"> </span>build
+poetry<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
+</code></pre></div>
+<p>Expected: each command exits zero; <code>dist/</code> contains one 2.4.2 wheel and one 2.4.2 source distribution.</p>
+<ul>
+<li>[ ] <strong>Step 5: Inspect the built artifacts</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import pathlib, tarfile, zipfile; d=pathlib.Path(&quot;dist&quot;); w=next(d.glob(&quot;spindle_token-2.4.2-*.whl&quot;)); s=next(d.glob(&quot;spindle_token-2.4.2.tar.gz&quot;)); z=zipfile.ZipFile(w); m=z.read(&quot;spindle_token-2.4.2.dist-info/METADATA&quot;).decode(); assert &quot;Version: 2.4.2&quot; in m; assert &quot;Requires-Dist: cryptography (&gt;=50.0.0,&lt;51.0.0)&quot; in m; t=tarfile.open(s); assert any(n.endswith(&quot;/pyproject.toml&quot;) for n in t.getnames()); print(w, s)&#39;</span>
+</code></pre></div>
+<p>Expected: exit zero and the two artifact paths are printed.</p>
+<ul>
+<li>[ ] <strong>Step 6: Pass the Databricks notebook release gate</strong></li>
+</ul>
+<p>Install <code>dist/spindle_token-2.4.2-py3-none-any.whl</code> into the target Databricks environment and run <code>docs/guides/databricks.ipynb</code> end to end. Record confirmation that every cell completed successfully. The current CLI profile reports invalid authentication, so refresh it securely or complete this gate in the signed-in Databricks UI; do not place credentials in commands or chat.</p>
+<ul>
+<li>[ ] <strong>Step 7: Check release diff hygiene</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>diff<span class="w"> </span>--check
+git<span class="w"> </span>status<span class="w"> </span>--short<span class="w"> </span>--branch
+git<span class="w"> </span>log<span class="w"> </span>-2<span class="w"> </span>--oneline<span class="w"> </span>--decorate
+</code></pre></div>
+<p>Expected: no tracked release changes remain uncommitted; only ignored generated <code>dist/</code> and <code>site/</code> artifacts may exist.</p>
+<h3 id="task-3-merge-the-focused-release-pull-request">Task 3: Merge the focused release pull request</h3>
+<p><strong>Files:</strong>
+- Deliver: the two commits on <code>agent/release-2.4.2</code>.</p>
+<p><strong>Interfaces:</strong>
+- Consumes: verified release candidate and successful Databricks gate.
+- Produces: v2.4.2 release commit merged into <code>origin/main</code> with green CI.</p>
+<ul>
+<li>[ ] <strong>Step 1: Push and create the pull request</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>agent/release-2.4.2
+gh<span class="w"> </span>pr<span class="w"> </span>create<span class="w"> </span>--base<span class="w"> </span>main<span class="w"> </span>--head<span class="w"> </span>agent/release-2.4.2<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;chore: prepare 2.4.2 security release&quot;</span><span class="w"> </span>--body<span class="w"> </span><span class="s2">&quot;## Summary</span>
+<span class="s2">- require cryptography 50.x to remediate CVE-2026-69247</span>
+<span class="s2">- bump spindle-token to 2.4.2 and refresh the lock</span>
+<span class="s2">- document and verify the compatibility boundary</span>
+
+<span class="s2">## Verification</span>
+<span class="s2">- full pytest suite under Temurin 17</span>
+<span class="s2">- Black check</span>
+<span class="s2">- wheel and sdist build plus metadata inspection</span>
+<span class="s2">- strict MkDocs build</span>
+<span class="s2">- Databricks notebook validation&quot;</span>
+</code></pre></div>
+<ul>
+<li>[ ] <strong>Step 2: Wait for and verify every required check</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>gh<span class="w"> </span>pr<span class="w"> </span>checks<span class="w"> </span>--watch
+</code></pre></div>
+<p>Expected: all required checks pass.</p>
+<ul>
+<li>[ ] <strong>Step 3: Merge through the protected branch</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>gh<span class="w"> </span>pr<span class="w"> </span>merge<span class="w"> </span>--squash<span class="w"> </span>--delete-branch
+git<span class="w"> </span>switch<span class="w"> </span>main
+git<span class="w"> </span>pull<span class="w"> </span>--ff-only
+</code></pre></div>
+<p>Expected: the PR is merged, local <code>main</code> equals <code>origin/main</code>, and the merged commit contains version 2.4.2.</p>
+<h3 id="task-4-publish-and-verify-v242">Task 4: Publish and verify v2.4.2</h3>
+<p><strong>Files:</strong>
+- Publish: <code>dist/spindle_token-2.4.2-py3-none-any.whl</code>.
+- Publish: <code>dist/spindle_token-2.4.2.tar.gz</code>.
+- Deploy: generated MkDocs site.</p>
+<p><strong>Interfaces:</strong>
+- Consumes: merged and verified v2.4.2 commit.
+- Produces: immutable <code>v2.4.2</code> tag, PyPI release, deployed docs, and public GitHub release.</p>
+<ul>
+<li>[ ] <strong>Step 1: Rebuild and reverify the merged release commit</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>install
+<span class="nv">JAVA_HOME</span><span class="o">=</span>/Users/erikdreyer/.sdkman/candidates/java/17.0.20-tem<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest
+poetry<span class="w"> </span>run<span class="w"> </span>black<span class="w"> </span>--check<span class="w"> </span>.
+poetry<span class="w"> </span>build
+poetry<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
+git<span class="w"> </span>status<span class="w"> </span>--short<span class="w"> </span>--branch
+</code></pre></div>
+<p>Expected: tests and builds pass, the worktree is clean, and the artifacts are version 2.4.2.</p>
+<ul>
+<li>[ ] <strong>Step 2: Create and push the annotated release tag</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v2.4.2<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release v2.4.2&quot;</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>v2.4.2
+git<span class="w"> </span>ls-remote<span class="w"> </span>--tags<span class="w"> </span>origin<span class="w"> </span>v2.4.2<span class="w"> </span>v2.4.2^<span class="o">{}</span>
+</code></pre></div>
+<p>Expected: the remote annotated tag peels to the verified <code>main</code> commit.</p>
+<ul>
+<li>[ ] <strong>Step 3: Create and inspect the draft GitHub release</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>v2.4.2<span class="w"> </span>--draft<span class="w"> </span>--verify-tag<span class="w"> </span>--title<span class="w"> </span>v2.4.2<span class="w"> </span>--notes<span class="w"> </span><span class="s2">&quot;## Security and Compatibility</span>
+
+<span class="s2">- Raised the minimum \`cryptography\` version to 50.0.0, which fixes CVE-2026-69247 by preventing distinguishable errors or timing during PKCS7 encrypted-key unwrap from acting as a Bleichenbacher oracle.</span>
+<span class="s2">- Adopted the upstream deprecation of finite-field Diffie-Hellman key exchange. \`spindle-token\` does not use the deprecated FFDH APIs.&quot;</span>
+gh<span class="w"> </span>release<span class="w"> </span>view<span class="w"> </span>v2.4.2<span class="w"> </span>--json<span class="w"> </span>isDraft,name,tagName,targetCommitish,url
+</code></pre></div>
+<p>Expected: a draft named and tagged <code>v2.4.2</code>, targeting the release commit, with only the 2.4.2 notes.</p>
+<ul>
+<li>[ ] <strong>Step 4: Publish to PyPI</strong></li>
+</ul>
+<p>Run without printing or changing stored credentials:</p>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>publish<span class="w"> </span>--no-interaction
+</code></pre></div>
+<p>Expected: both the wheel and source distribution upload successfully. If authentication or upload fails, stop here.</p>
+<ul>
+<li>[ ] <strong>Step 5: Verify PyPI before downstream publication</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://pypi.org/pypi/spindle-token/json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;.info.version == &quot;2.4.2&quot; and (.releases[&quot;2.4.2&quot;] | length) == 2 and (any(.releases[&quot;2.4.2&quot;][]; .packagetype == &quot;bdist_wheel&quot;)) and (any(.releases[&quot;2.4.2&quot;][]; .packagetype == &quot;sdist&quot;))&#39;</span>
+</code></pre></div>
+<p>Expected: <code>true</code> and exit zero.</p>
+<ul>
+<li>[ ] <strong>Step 6: Deploy documentation and publish the GitHub release</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>gh-deploy
+gh<span class="w"> </span>release<span class="w"> </span>edit<span class="w"> </span>v2.4.2<span class="w"> </span>--draft<span class="o">=</span><span class="nb">false</span>
+</code></pre></div>
+<p>Expected: docs deploy succeeds and the GitHub release becomes public.</p>
+<ul>
+<li>[ ] <strong>Step 7: Verify final public state</strong></li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code>gh<span class="w"> </span>release<span class="w"> </span>view<span class="w"> </span>v2.4.2<span class="w"> </span>--json<span class="w"> </span>isDraft,isPrerelease,name,tagName,publishedAt,targetCommitish,url
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://pypi.org/pypi/spindle-token/2.4.2/json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;.info.version == &quot;2.4.2&quot; and (.urls | length) == 2&#39;</span>
+git<span class="w"> </span>status<span class="w"> </span>--short<span class="w"> </span>--branch
+</code></pre></div>
+<p>Expected: the GitHub release is public and non-prerelease, PyPI returns exactly two v2.4.2 artifacts, and <code>main</code> is clean and synchronized with <code>origin/main</code>.</p>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 Spindle Health, Inc
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>
