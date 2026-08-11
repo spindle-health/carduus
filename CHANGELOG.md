@@ -2,6 +2,16 @@
 
 All notable changes to `spindle-token` will be documented in this file.
 
+## 2.4.2
+
+### Security and Compatibility
+
+- Raised the minimum `cryptography` version to 50.0.0, which fixes
+  CVE-2026-69247 by preventing distinguishable errors or timing during PKCS7
+  encrypted-key unwrap from acting as a Bleichenbacher oracle.
+- Adopted the upstream deprecation of finite-field Diffie-Hellman key exchange.
+  `spindle-token` does not use the deprecated FFDH APIs.
+
 ## 2.4.1
 
 ### Security and Compatibility

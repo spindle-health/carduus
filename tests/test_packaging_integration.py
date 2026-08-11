@@ -25,6 +25,7 @@ def test_wheel_metadata_marks_pyspark_as_spark_extra_only() -> None:
     with zipfile.ZipFile(wheel) as zf:
         metadata = zf.read(f"spindle_token-{__version__}.dist-info/METADATA").decode()
 
+    assert "Requires-Dist: cryptography (>=50.0.0,<51.0.0)" in metadata
     assert "Provides-Extra: spark" in metadata
     assert 'Requires-Dist: pyspark (>=3.5.0,<4.2.0) ; extra == "spark"' in metadata
     assert "Requires-Dist: pyspark (>=3.5.0,<4.2.0)\n" not in metadata
